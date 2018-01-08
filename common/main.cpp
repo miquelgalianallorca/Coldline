@@ -3,45 +3,74 @@
 #include "core.h"
 #include "font.h"
 
-//-----------------------------------------------------------------------------
-struct Ball
-{
+struct Entity {
   vec2   pos;
-  vec2   vel;
+  float  vel;
   GLuint gfx;
   float  radius;
+  float  angle;
+  bool   alive;
 };
-#define NUM_BALLS 20
-Ball balls[NUM_BALLS];
 
-#define MAX_BALL_SPEED 8.f
+void LoadLevel(std::vector<Entity> &enemies, GLuint texEnemy) {
+    Entity enemy1;
+    enemy1.pos = vmake(30.f, 100.f);
+    enemy1.vel = 8.f;
+    enemy1.radius = 25.f;
+    enemy1.gfx = texEnemy;
+    enemy1.angle = 0.f;
+    enemies.push_back(enemy1);
+    Entity enemy2;
+    enemy2.pos = vmake(100.f, 400.f);
+    enemy2.vel = 8.f;
+    enemy2.radius = 25.f;
+    enemy2.gfx = texEnemy;
+    enemy2.angle = 0.f;
+    enemies.push_back(enemy2);
+    Entity enemy3;
+    enemy3.pos = vmake(450.f, 350.f);
+    enemy3.vel = 8.f;
+    enemy3.radius = 25.f;
+    enemy3.gfx = texEnemy;
+    enemy3.angle = -90.f;
+    enemies.push_back(enemy3);
+}
 
-//-----------------------------------------------------------------------------
-int Main(void)
-{
-  FONT_Init();
+float Distance(const vec2 &pos1, const vec2 &pos2) {
+    vec2 dir = vmake(pos2.x - pos1.x, pos2.y - pos1.y);
+    float dist = sqrtf(dir.x * dir.x + dir.y * dir.y);
+    
+   /* char buffer[100];
+    sprintf_s(buffer, "Dist: %f\n", dist);
+    OutputDebugStringA(buffer);*/
+    
+    return dist;
+}
+
+int Main(void) {
+  //FONT_Init();
 
   // Load textures
-  GLuint texbkg        = CORE_LoadPNG("data/circle-bkg-128.png"   , true);
-  GLuint texlargeball  = CORE_LoadPNG("data/ball128.png"          , false);
-  GLuint texsmallball  = CORE_LoadPNG("data/tyrian_ball.png"      , false);
+  GLuint texPlayer = CORE_LoadPNG("data/survivor.png",  false);
+  GLuint texFloor  = CORE_LoadPNG("data/tilefloor.png", false);
+  GLuint texEnemy  = CORE_LoadPNG("data/rifleman.png",  false);
+  GLuint texBlood  = CORE_LoadPNG("data/blood.png",     false);
+  GLuint texSlash  = CORE_LoadPNG("data/slash.png",     false);
 
   // Init game state
-  for (int i = 0; i < NUM_BALLS; i++)
-  {
-    balls[i].pos = vmake(CORE_FRand(0.0, SCR_WIDTH), CORE_FRand(0.0, SCR_HEIGHT));
-    balls[i].vel = vmake(CORE_FRand(-MAX_BALL_SPEED, +MAX_BALL_SPEED), CORE_FRand(-MAX_BALL_SPEED, +MAX_BALL_SPEED));
-    if (CORE_FRand(0.f, 1.f) < 0.10f)
-    {
-      balls[i].radius = 64.f;
-      balls[i].gfx = texlargeball;
-    }
-    else
-    {
-      balls[i].radius = 16.f;
-      balls[i].gfx = texsmallball;
-    }
-  }
+  Entity player;
+  player.pos = vmake(SCR_WIDTH / 2, SCR_HEIGHT / 20);
+  player.vel = 6.f;
+  player.radius = 25.f;
+  player.gfx = texPlayer;
+  player.angle = 90.f;
+
+  float playerRange = 50.f;
+  int slashTimer = 0;
+
+  std::vector<Entity> bullets;
+  std::vector<Entity> enemies;
+  LoadLevel(enemies, texEnemy);
 
   // Set up rendering
   glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT); // Sets up clipping
@@ -53,84 +82,63 @@ int Main(void)
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-  while (!SYS_GottaQuit())
-  {
-    // Render
+  while (!SYS_GottaQuit()) {
+    // Render ===========================================================================================
     glClear( GL_COLOR_BUFFER_BIT );
 
-    // Render backgground
+    // Render background
     for (int i = 0; i <= SCR_WIDTH/128; i++)
       for (int j = 0; j <= SCR_HEIGHT/128; j++)
-        CORE_RenderCenteredSprite(vmake(i * 128.f + 64.f, j * 128.f + 64.f), vmake(128.f, 128.f), texbkg);
+        CORE_RenderCenteredSprite(vmake(i * 128.f + 64.f, j * 128.f + 64.f), vmake(128.f, 128.f), texFloor);
 
-    // Render balls
-    for (int i = 0; i < NUM_BALLS; i++)
-      CORE_RenderCenteredSprite(balls[i].pos, vmake(balls[i].radius * 2.f, balls[i].radius * 2.f), balls[i].gfx);
-
-    // Text
-    FONT_DrawString(vmake(SCR_WIDTH/2 - 6*16, 16), "HELLO WORLD!");
-   
-    SYS_Show();
-
-    // Run balls
-    for (int i = 0; i < NUM_BALLS; i++)
-    {
-      vec2 oldpos = balls[i].pos;
-      vec2 newpos = vadd(oldpos, balls[i].vel);
-
-      bool collision = false;
-      int colliding_ball = -1;
-      for (int j = 0; j < NUM_BALLS; j++)
-      {
-        if (i != j)
-        {
-          float limit2 = (balls[i].radius + balls[j].radius) * (balls[i].radius + balls[j].radius);
-          if (vlen2(vsub(oldpos, balls[j].pos)) > limit2 && vlen2(vsub(newpos, balls[j].pos)) <= limit2)
-          {
-            collision = true;
-            colliding_ball = j;
-            break;
-          }
-        }
-      }
-
-      if (!collision)
-        balls[i].pos = newpos;
-      else
-      {
-        // Rebound!
-        balls[i].vel = vscale(balls[i].vel, -1.f);
-        balls[colliding_ball].vel = vscale(balls[colliding_ball].vel, -1.f);
-      }
-
-      // Rebound on margins
-      if (balls[i].vel.x > 0.0)
-      {
-        if (balls[i].pos.x > SCR_WIDTH)
-          balls[i].vel.x *= -1.0;
-      } else {
-        if (balls[i].pos.x < 0)
-          balls[i].vel.x *= -1.0;
-      }
-      if (balls[i].vel.y > 0.0)
-      {
-        if (balls[i].pos.y > SCR_HEIGHT)
-          balls[i].vel.y *= -1.0;
-      } else {
-        if (balls[i].pos.y < 0)
-          balls[i].vel.y *= -1.0;
-      }
+    //Render enemies
+    for (auto enemy : enemies) {
+        if (enemy.alive)
+            CORE_RenderCenteredRotatedSprite(enemy.pos, vmake(enemy.radius * 2.f, enemy.radius * 2.f), enemy.angle, enemy.gfx);
+        else
+            CORE_RenderCenteredRotatedSprite(enemy.pos, vmake(enemy.radius * 2.f, enemy.radius * 2.f), enemy.angle, texBlood);
     }
+    //Render player
+    CORE_RenderCenteredRotatedSprite(player.pos, vmake(player.radius * 2.f, player.radius * 2.f), player.angle, player.gfx);
+
+    //Render effects
+    if (slashTimer > 0) {
+        CORE_RenderCenteredRotatedSprite(player.pos, vmake(player.radius * 2.f, player.radius * 2.f), player.angle, texSlash);
+    }
+
+    SYS_Show();
+    // ==================================================================================================
+
+
+    // Run ==============================================================================================
+    // Move
+    vec2 newpos = player.pos;
+    if (SYS_KeyPressed(SYS_KEY_UP))   { newpos = vadd(newpos, vmake(0, player.vel));  player.angle = 90.f;  }
+    if (SYS_KeyPressed(SYS_KEY_DOWN)) { newpos = vadd(newpos, vmake(0, -player.vel)); player.angle = -90.f; }
+    if (SYS_KeyPressed(SYS_KEY_LEFT)) { newpos = vadd(newpos, vmake(-player.vel, 0)); player.angle = 179.f; }
+    if (SYS_KeyPressed(SYS_KEY_RIGHT)){ newpos = vadd(newpos, vmake(player.vel,  0)); player.angle = 0.f;   }
+    player.pos = newpos;
+   
+    // Slash
+    if (SYS_MouseButonPressed(SYS_MB_LEFT)) {
+        slashTimer = 10;
+        for (auto enemy : enemies) {
+            if (Distance(player.pos, enemy.pos) < playerRange)
+                enemy.alive = false;
+        }
+    }
+    if (slashTimer > 0) {
+        --slashTimer;
+    }
+    // ==================================================================================================
    
     // Keep system running
     SYS_Pump();
     SYS_Sleep(17);
   }
 
-  CORE_UnloadPNG(texbkg);
-  CORE_UnloadPNG(texlargeball);
-  CORE_UnloadPNG(texsmallball);
-  FONT_End();
+  CORE_UnloadPNG(texPlayer);
+  //FONT_End();
 
   return 0;
 }
