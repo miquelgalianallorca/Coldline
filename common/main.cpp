@@ -19,6 +19,7 @@ void LoadLevel(std::vector<Entity> &enemies, GLuint texEnemy) {
     enemy1.radius = 25.f;
     enemy1.gfx = texEnemy;
     enemy1.angle = 0.f;
+    enemy1.alive = true;
     enemies.push_back(enemy1);
     Entity enemy2;
     enemy2.pos = vmake(100.f, 400.f);
@@ -26,6 +27,7 @@ void LoadLevel(std::vector<Entity> &enemies, GLuint texEnemy) {
     enemy2.radius = 25.f;
     enemy2.gfx = texEnemy;
     enemy2.angle = 0.f;
+    enemy2.alive = true;
     enemies.push_back(enemy2);
     Entity enemy3;
     enemy3.pos = vmake(450.f, 350.f);
@@ -33,6 +35,7 @@ void LoadLevel(std::vector<Entity> &enemies, GLuint texEnemy) {
     enemy3.radius = 25.f;
     enemy3.gfx = texEnemy;
     enemy3.angle = -90.f;
+    enemy3.alive = true;
     enemies.push_back(enemy3);
 }
 
@@ -122,7 +125,7 @@ int Main(void) {
     // Slash
     if (SYS_MouseButonPressed(SYS_MB_LEFT)) {
         slashTimer = 10;
-        for (auto enemy : enemies) {
+        for (auto& enemy : enemies) {
             if (Distance(player.pos, enemy.pos) < playerRange)
                 enemy.alive = false;
         }
