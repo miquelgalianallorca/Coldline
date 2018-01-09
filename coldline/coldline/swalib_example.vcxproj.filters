@@ -19,6 +19,12 @@
     <Filter Include="Source Files\swalib">
       <UniqueIdentifier>{a34b3613-18d2-46ab-9987-9302239b6f24}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\State">
+      <UniqueIdentifier>{394ec920-ba3e-4513-a326-06e27af41ce4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\State">
+      <UniqueIdentifier>{a0f6a95a-84df-4a3b-9646-e711be5af452}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\common\stdafx.cpp">
@@ -27,33 +33,63 @@
     <ClCompile Include="..\..\common\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\common\core.cpp">
+    <ClCompile Include="..\..\common\Game.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\GameStateMenu.cpp">
+      <Filter>Source Files\State</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\GameStatePlay.cpp">
+      <Filter>Source Files\State</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\StateManager.cpp">
+      <Filter>Source Files\State</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\swalib\core.cpp">
       <Filter>Source Files\swalib</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\common\font.cpp">
+    <ClCompile Include="..\..\common\swalib\font.cpp">
       <Filter>Source Files\swalib</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\common\lodepng.cpp">
+    <ClCompile Include="..\..\common\swalib\lodepng.cpp">
       <Filter>Source Files\swalib</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\common\sys_win.cpp">
+    <ClCompile Include="..\..\common\swalib\sys_win.cpp">
       <Filter>Source Files\swalib</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\common\core.h">
-      <Filter>Header Files\swalib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\font.h">
-      <Filter>Header Files\swalib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\lodepng.h">
-      <Filter>Header Files\swalib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\sys.h">
-      <Filter>Header Files\swalib</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\common\stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\Game.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\GameState.h">
+      <Filter>Header Files\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\GameStateMenu.h">
+      <Filter>Header Files\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\GameStatePlay.h">
+      <Filter>Header Files\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\StateManager.h">
+      <Filter>Header Files\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\swalib\core.h">
+      <Filter>Header Files\swalib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\swalib\font.h">
+      <Filter>Header Files\swalib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\swalib\lodepng.h">
+      <Filter>Header Files\swalib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\swalib\sys.h">
+      <Filter>Header Files\swalib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\globals.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

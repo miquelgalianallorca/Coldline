@@ -117,19 +117,29 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\common\core.cpp" />
+    <ClCompile Include="..\..\common\Game.cpp" />
+    <ClCompile Include="..\..\common\GameStateMenu.cpp" />
+    <ClCompile Include="..\..\common\GameStatePlay.cpp" />
     <ClCompile Include="..\..\common\main.cpp" />
-    <ClCompile Include="..\..\common\font.cpp" />
-    <ClCompile Include="..\..\common\lodepng.cpp" />
+    <ClCompile Include="..\..\common\StateManager.cpp" />
     <ClCompile Include="..\..\common\stdafx.cpp" />
-    <ClCompile Include="..\..\common\sys_win.cpp" />
+    <ClCompile Include="..\..\common\swalib\core.cpp" />
+    <ClCompile Include="..\..\common\swalib\font.cpp" />
+    <ClCompile Include="..\..\common\swalib\lodepng.cpp" />
+    <ClCompile Include="..\..\common\swalib\sys_win.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\common\core.h" />
-    <ClInclude Include="..\..\common\font.h" />
-    <ClInclude Include="..\..\common\lodepng.h" />
+    <ClInclude Include="..\..\common\Game.h" />
+    <ClInclude Include="..\..\common\GameState.h" />
+    <ClInclude Include="..\..\common\GameStateMenu.h" />
+    <ClInclude Include="..\..\common\GameStatePlay.h" />
+    <ClInclude Include="..\..\common\globals.h" />
+    <ClInclude Include="..\..\common\StateManager.h" />
     <ClInclude Include="..\..\common\stdafx.h" />
-    <ClInclude Include="..\..\common\sys.h" />
+    <ClInclude Include="..\..\common\swalib\core.h" />
+    <ClInclude Include="..\..\common\swalib\font.h" />
+    <ClInclude Include="..\..\common\swalib\lodepng.h" />
+    <ClInclude Include="..\..\common\swalib\sys.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
