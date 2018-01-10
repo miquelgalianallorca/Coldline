@@ -14,6 +14,8 @@ public:
 
 protected:
     StateID currentState;
+    // Duplicity of data! if nextState != currentState -> change state
+    // TO DO
     StateID nextState;
     bool    changeState;
 };

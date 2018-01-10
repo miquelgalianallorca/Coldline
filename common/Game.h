@@ -7,10 +7,6 @@
 
 class Entity;
 
-// Game Utilities
-void LoadLevel(std::vector<Entity> &enemies, GLuint texEnemy);
-float Distance(const vec2 &pos1, const vec2 &pos2);
-
 class Game {
 public:
     Game();
@@ -19,8 +15,12 @@ public:
     void Run();
     void Render();
     bool IsLevelComplete();
+    static float Distance(const vec2 &pos1, const vec2 &pos2);
 
 private:
+    // Game Utilities
+    void LoadLevel(std::vector<Entity*> &enemies, GLuint texEnemy);
+
     // Textures
     GLuint texPlayer;
     GLuint texFloor;
@@ -32,7 +32,6 @@ private:
     Entity *player;
     float playerRange;
     int slashTimer;
-    //std::vector<Entity> bullets;
     std::vector<Entity*> enemies;
 
     // Level

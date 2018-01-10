@@ -11,8 +11,9 @@ public:
     void Input();
     void Run();
     void Render();
-    void ChangeState(StateID stateID);
 
 private:
+    void ChangeState(StateID stateID);
+
     GameState *state;
 };

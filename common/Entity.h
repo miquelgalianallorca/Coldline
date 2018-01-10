@@ -19,7 +19,10 @@ public:
     void SetAngle(float _angle);
     void SetAlive(bool  _alive);
 
-private:
+    virtual void Run()    = 0;
+    virtual void Render() = 0;
+
+protected:
     vec2   pos;
     float  vel;
     GLuint gfx;

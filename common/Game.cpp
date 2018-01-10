@@ -1,25 +1,6 @@
 #include "Game.h"
-#include "Entity.h"
-
-void LoadLevel(std::vector<Entity*> &enemies, GLuint texEnemy) {
-    Entity *enemy1 = new Entity(vmake(30.f, 100.f), 8.f, texEnemy, 25.f, 0.f, true);
-    Entity *enemy2 = new Entity(vmake(100.f, 400.f), 8.f, texEnemy, 25.f, 0.f, true);
-    Entity *enemy3 = new Entity(vmake(450.f, 350.f), 8.f, texEnemy, 25.f, 0.f, true);
-    enemies.push_back(enemy1);
-    enemies.push_back(enemy2);
-    enemies.push_back(enemy3);
-}
-
-float Distance(const vec2 &pos1, const vec2 &pos2) {
-    vec2 dir = vmake(pos2.x - pos1.x, pos2.y - pos1.y);
-    float dist = sqrtf(dir.x * dir.x + dir.y * dir.y);
-
-    /* char buffer[100];
-    sprintf_s(buffer, "Dist: %f\n", dist);
-    OutputDebugStringA(buffer);*/
-
-    return dist;
-}
+#include "EntityPlayer.h"
+#include "EntityEnemy.h"
 
 Game::Game() :
     playerRange(50.f),
@@ -34,7 +15,7 @@ Game::Game() :
     texBlood  = CORE_LoadPNG("data/blood.png",     false);
     texSlash  = CORE_LoadPNG("data/slash.png",     false);
     // Entities
-    player = new Entity(vmake(SCR_WIDTH / 2, SCR_HEIGHT / 20), 6.f, texPlayer, 25.f, 90.f, true);
+    player = new EntityPlayer(vmake(SCR_WIDTH / 2, SCR_HEIGHT / 20), 6.f, texPlayer, 25.f, 90.f, true, 50.f, texSlash);
     LoadLevel(enemies, texEnemy);
 }
 
@@ -104,3 +85,17 @@ void Game::Run() {
 }
 
 bool Game::IsLevelComplete() { return levelComplete; }
+
+void Game::LoadLevel(std::vector<Entity*> &enemies, GLuint texEnemy) {
+    Entity *enemy1 = new EntityEnemy(vmake(30.f, 100.f), 8.f, texEnemy, 25.f, 0.f, true, texBlood);
+    Entity *enemy2 = new EntityEnemy(vmake(100.f, 400.f), 8.f, texEnemy, 25.f, 0.f, true, texBlood);
+    Entity *enemy3 = new EntityEnemy(vmake(450.f, 350.f), 8.f, texEnemy, 25.f, 0.f, true, texBlood);
+    enemies.push_back(enemy1);
+    enemies.push_back(enemy2);
+    enemies.push_back(enemy3);
+}
+
+float Game::Distance(const vec2 &pos1, const vec2 &pos2) {
+    vec2 dir = vmake(pos2.x - pos1.x, pos2.y - pos1.y);
+    return sqrtf(dir.x * dir.x + dir.y * dir.y);
+}

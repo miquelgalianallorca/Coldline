@@ -118,6 +118,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\common\Entity.cpp" />
+    <ClCompile Include="..\..\common\EntityEnemy.cpp" />
+    <ClCompile Include="..\..\common\EntityPlayer.cpp" />
     <ClCompile Include="..\..\common\Game.cpp" />
     <ClCompile Include="..\..\common\GameStateMenu.cpp" />
     <ClCompile Include="..\..\common\GameStatePlay.cpp" />
@@ -131,6 +133,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\common\Entity.h" />
+    <ClInclude Include="..\..\common\EntityEnemy.h" />
+    <ClInclude Include="..\..\common\EntityPlayer.h" />
     <ClInclude Include="..\..\common\Game.h" />
     <ClInclude Include="..\..\common\GameState.h" />
     <ClInclude Include="..\..\common\GameStateMenu.h" />
