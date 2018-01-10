@@ -57,6 +57,9 @@
     <ClCompile Include="..\..\common\swalib\sys_win.cpp">
       <Filter>Source Files\swalib</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\common\Entity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\common\stdafx.h">
@@ -90,6 +93,9 @@
       <Filter>Header Files\swalib</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\globals.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\Entity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

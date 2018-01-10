@@ -3,7 +3,8 @@
 #include "GameStatePlay.h"
 
 StateManager::StateManager() {
-    state = new GameStatePlay();
+    //state = new GameStatePlay();
+    state = new GameStateMenu();
 }
 
 StateManager::~StateManager() {
@@ -11,8 +12,14 @@ StateManager::~StateManager() {
 }
 
 void StateManager::Input()  { state->Input();  }
-void StateManager::Run()    { state->Run();    }
 void StateManager::Render() { state->Render(); }
+
+void StateManager::Run() {
+    if (state->GetChangeState())
+        ChangeState(state->GetNextState());
+    state->Run();
+}
+
 
 void StateManager::ChangeState(StateID stateID) {
     GameState *oldState = state;

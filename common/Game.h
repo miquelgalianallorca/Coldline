@@ -5,14 +5,7 @@
 #include "swalib\core.h"
 #include "swalib\font.h"
 
-struct Entity {
-    vec2   pos;
-    float  vel;
-    GLuint gfx;
-    float  radius;
-    float  angle;
-    bool   alive;
-};
+class Entity;
 
 // Game Utilities
 void LoadLevel(std::vector<Entity> &enemies, GLuint texEnemy);
@@ -25,6 +18,7 @@ public:
 
     void Run();
     void Render();
+    bool IsLevelComplete();
 
 private:
     // Textures
@@ -35,9 +29,13 @@ private:
     GLuint texSlash;
 
     // Entities
-    Entity player;
-    float playerRange = 50.f;
-    int slashTimer = 0;
-    std::vector<Entity> bullets;
-    std::vector<Entity> enemies;
+    Entity *player;
+    float playerRange;
+    int slashTimer;
+    //std::vector<Entity> bullets;
+    std::vector<Entity*> enemies;
+
+    // Level
+    size_t numDead;
+    bool   levelComplete;
 };

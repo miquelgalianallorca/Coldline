@@ -117,6 +117,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\common\Entity.cpp" />
     <ClCompile Include="..\..\common\Game.cpp" />
     <ClCompile Include="..\..\common\GameStateMenu.cpp" />
     <ClCompile Include="..\..\common\GameStatePlay.cpp" />
@@ -129,6 +130,7 @@
     <ClCompile Include="..\..\common\swalib\sys_win.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\common\Entity.h" />
     <ClInclude Include="..\..\common\Game.h" />
     <ClInclude Include="..\..\common\GameState.h" />
     <ClInclude Include="..\..\common\GameStateMenu.h" />

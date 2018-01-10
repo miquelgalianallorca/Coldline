@@ -12,5 +12,4 @@ public:
     void Input();
     void Run();
     void Render();
-    StateID GetID() { return StateID::STATE_PLAY; }
 };
