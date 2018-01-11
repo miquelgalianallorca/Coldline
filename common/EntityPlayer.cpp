@@ -3,12 +3,11 @@
 #include "Game.h"
 
 EntityPlayer::EntityPlayer(vec2 _pos, float _vel, GLuint _gfx, float _radius, float _angle, bool _alive,
-    float _playerRange, GLuint _gfxSlash, std::vector<Entity*>& _enemies) :
+    float _playerRange, GLuint _gfxSlash) :
     Entity(_pos, _vel, _gfx, _radius, _angle, _alive),
     playerRange(_playerRange),
     slashTimer(0),
-    gfxSlash(_gfxSlash),
-    enemies(_enemies)
+    gfxSlash(_gfxSlash)
 {}
 
 void EntityPlayer::Run() {
@@ -22,14 +21,7 @@ void EntityPlayer::Run() {
     // Slash
     if (SYS_MouseButonPressed(SYS_MB_LEFT)) {
         slashTimer = 10;
-        for (auto enemy : enemies) {
-            if (enemy->GetAlive() && Game::Distance(pos, enemy->GetPos()) < playerRange) {
-                enemy->SetAlive(false);
-                ++numDead; //Fixing here... TO DO
-            }
-        }
-        // All dead: level cleared
-        if (numDead == enemies.size()) levelComplete = true;
+        game->CheckKill(pos, playerRange);
     }
     if (slashTimer > 0) --slashTimer;
 }

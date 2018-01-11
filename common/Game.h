@@ -15,11 +15,13 @@ public:
     void Run();
     void Render();
     bool IsLevelComplete();
-    static float Distance(const vec2 &pos1, const vec2 &pos2);
+    float Distance(const vec2 &pos1, const vec2 &pos2);
+
+    void CheckKill(const vec2& playerPos, const float playerRange);
 
 private:
     // Game Utilities
-    void LoadLevel(std::vector<Entity*> &enemies, GLuint texEnemy);
+    void LoadLevel();
 
     // Textures
     GLuint texPlayer;
@@ -28,11 +30,7 @@ private:
     GLuint texBlood;
     GLuint texSlash;
 
-    // Entities
-    Entity *player;
-    float playerRange;
-    int slashTimer;
-    std::vector<Entity*> enemies;
+    std::vector<Entity*> entities;
 
     // Level
     size_t numDead;

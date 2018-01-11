@@ -3,8 +3,6 @@
 #include "EntityEnemy.h"
 
 Game::Game() :
-    playerRange(50.f),
-    slashTimer(0),
     numDead(0),
     levelComplete(false)
 {
@@ -15,8 +13,9 @@ Game::Game() :
     texBlood  = CORE_LoadPNG("data/blood.png",     false);
     texSlash  = CORE_LoadPNG("data/slash.png",     false);
     // Entities
-    player = new EntityPlayer(vmake(SCR_WIDTH / 2, SCR_HEIGHT / 20), 6.f, texPlayer, 25.f, 90.f, true, 50.f, texSlash);
-    LoadLevel(enemies, texEnemy);
+    Entity *player = new EntityPlayer(vmake(SCR_WIDTH / 2, SCR_HEIGHT / 20), 6.f, texPlayer, 25.f, 90.f, true, 50.f, texSlash);
+    entities.push_back(player);
+    LoadLevel();
 }
 
 Game::~Game() {
@@ -27,9 +26,8 @@ Game::~Game() {
     CORE_UnloadPNG(texBlood);
     CORE_UnloadPNG(texSlash);
     // Pointers
-    delete player;
-    for (auto enemy : enemies) delete enemy;
-    enemies.clear();
+    for (auto entity : entities) delete entity;
+    entities.clear();
 }
 
 void Game::Render() {
@@ -38,64 +36,39 @@ void Game::Render() {
         for (int j = 0; j <= SCR_HEIGHT / 128; j++)
             CORE_RenderCenteredSprite(vmake(i * 128.f + 64.f, j * 128.f + 64.f),
                 vmake(128.f, 128.f), texFloor);
-
-    //Render enemies
-    for (auto enemy : enemies) {
-        if (enemy->GetAlive())
-            CORE_RenderCenteredRotatedSprite(enemy->GetPos(), vmake(enemy->GetRadius() * 2.f,
-                enemy->GetRadius() * 2.f), enemy->GetAngle(), enemy->GetGfx());
-        else
-            CORE_RenderCenteredRotatedSprite(enemy->GetPos(), vmake(enemy->GetRadius() * 2.f,
-                enemy->GetRadius() * 2.f), enemy->GetAngle(), texBlood);
-    }
-
-    //Render player
-    CORE_RenderCenteredRotatedSprite(player->GetPos(), vmake(player->GetRadius() * 2.f, player->GetRadius() * 2.f),
-        player->GetAngle(), player->GetGfx());
-
-    //Render effects
-    if (slashTimer > 0) {
-        CORE_RenderCenteredRotatedSprite(player->GetPos(), vmake(player->GetRadius() * 2.f, player->GetRadius() * 2.f),
-            player->GetAngle(), texSlash);
-    }
+    //Render entities
+    for (auto entity : entities)
+        entity->Render();
 }
 
 void Game::Run() {
-    // Move
-    vec2 newPos = player->GetPos();
-    if (SYS_KeyPressed(SYS_KEY_UP))    { newPos = vadd(newPos, vmake(0, player->GetVel()));  player->SetAngle(90.f);  }
-    if (SYS_KeyPressed(SYS_KEY_DOWN))  { newPos = vadd(newPos, vmake(0, -player->GetVel())); player->SetAngle(-90.f); }
-    if (SYS_KeyPressed(SYS_KEY_LEFT))  { newPos = vadd(newPos, vmake(-player->GetVel(), 0)); player->SetAngle(179.f); }
-    if (SYS_KeyPressed(SYS_KEY_RIGHT)) { newPos = vadd(newPos, vmake(player->GetVel(), 0));  player->SetAngle(0.f);   }
-    player->SetPos(newPos);
-
-    // Slash
-    if (SYS_MouseButonPressed(SYS_MB_LEFT)) {
-        slashTimer = 10;
-        for (auto enemy : enemies) {
-            if (enemy->GetAlive() && Distance(player->GetPos(), enemy->GetPos()) < playerRange) {
-                enemy->SetAlive(false);
-                ++numDead;
-            }
-        }
-        // All dead: level cleared
-        if (numDead == enemies.size()) levelComplete = true;
-    }
-    if (slashTimer > 0) --slashTimer;
+    for (auto entity : entities)
+        entity->Run();
 }
 
 bool Game::IsLevelComplete() { return levelComplete; }
 
-void Game::LoadLevel(std::vector<Entity*> &enemies, GLuint texEnemy) {
+void Game::LoadLevel() {
     Entity *enemy1 = new EntityEnemy(vmake(30.f, 100.f), 8.f, texEnemy, 25.f, 0.f, true, texBlood);
     Entity *enemy2 = new EntityEnemy(vmake(100.f, 400.f), 8.f, texEnemy, 25.f, 0.f, true, texBlood);
     Entity *enemy3 = new EntityEnemy(vmake(450.f, 350.f), 8.f, texEnemy, 25.f, 0.f, true, texBlood);
-    enemies.push_back(enemy1);
-    enemies.push_back(enemy2);
-    enemies.push_back(enemy3);
+    entities.push_back(enemy1);
+    entities.push_back(enemy2);
+    entities.push_back(enemy3);
 }
 
 float Game::Distance(const vec2 &pos1, const vec2 &pos2) {
     vec2 dir = vmake(pos2.x - pos1.x, pos2.y - pos1.y);
     return sqrtf(dir.x * dir.x + dir.y * dir.y);
+}
+
+void Game::CheckKill(const vec2& playerPos, const float playerRange) {
+    for (auto entity : entities) {
+        if (entity->GetAlive() && Distance(playerPos, entity->GetPos()) < playerRange) {
+            entity->SetAlive(false);
+            ++numDead;
+        }
+    }
+    // All dead: level cleared
+    if (numDead == entities.size()) levelComplete = true;
 }
