@@ -4,7 +4,9 @@ EntityEnemy::EntityEnemy(vec2 _pos, float _vel, GLuint _gfx, float _radius, floa
     GLuint _gfxBlood) :
     Entity(_pos, _vel, _gfx, _radius, _angle, _alive),
     gfxBlood(_gfxBlood)
-{}
+{
+    entityType = EntityType::ENEMY;
+}
 
 void EntityEnemy::Run() {
 

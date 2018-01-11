@@ -13,7 +13,7 @@ Game::Game() :
     texBlood  = CORE_LoadPNG("data/blood.png",     false);
     texSlash  = CORE_LoadPNG("data/slash.png",     false);
     // Entities
-    Entity *player = new EntityPlayer(vmake(SCR_WIDTH / 2, SCR_HEIGHT / 20), 6.f, texPlayer, 25.f, 90.f, true, 50.f, texSlash);
+    player = new EntityPlayer(vmake(SCR_WIDTH / 2, SCR_HEIGHT / 20), 6.f, texPlayer, 25.f, 90.f, true, 50.f, texSlash);
     entities.push_back(player);
     LoadLevel();
 }
@@ -36,6 +36,8 @@ void Game::Render() {
         for (int j = 0; j <= SCR_HEIGHT / 128; j++)
             CORE_RenderCenteredSprite(vmake(i * 128.f + 64.f, j * 128.f + 64.f),
                 vmake(128.f, 128.f), texFloor);
+    graphicsEngine.Draw(GraphicsEngine::Sprite::FLOOR, vmake(i * 128.f + 64.f, j * 128.f + 64.f),
+        vmake(128.f, 128.f), 0.f); //Here
     //Render entities
     for (auto entity : entities)
         entity->Render();
@@ -49,6 +51,7 @@ void Game::Run() {
 bool Game::IsLevelComplete() { return levelComplete; }
 
 void Game::LoadLevel() {
+    // TO DO: Read from JSON
     Entity *enemy1 = new EntityEnemy(vmake(30.f, 100.f), 8.f, texEnemy, 25.f, 0.f, true, texBlood);
     Entity *enemy2 = new EntityEnemy(vmake(100.f, 400.f), 8.f, texEnemy, 25.f, 0.f, true, texBlood);
     Entity *enemy3 = new EntityEnemy(vmake(450.f, 350.f), 8.f, texEnemy, 25.f, 0.f, true, texBlood);
@@ -71,4 +74,32 @@ void Game::CheckKill(const vec2& playerPos, const float playerRange) {
     }
     // All dead: level cleared
     if (numDead == entities.size()) levelComplete = true;
+}
+
+void Game::ProcessInput(Action action) {
+    // Player input
+    vec2  newPos   = player->GetPos();
+    float newAngle = player->GetAngle();
+    float vel      = player->GetVel();
+    switch (action) {
+        case Action::MOVE_U:
+            newPos = vadd(newPos, vmake(0, vel));
+            newAngle = 90.f;
+            break;
+        case Action::MOVE_D:
+            newPos = vadd(newPos, vmake(0, -vel));
+            newAngle = -90.f;
+            break;
+        case Action::MOVE_L:
+            newPos = vadd(newPos, vmake(-vel, 0));
+            newAngle = 179.f;
+            break;
+        case Action::MOVE_R:
+            newPos = vadd(newPos, vmake(vel, 0));
+            newAngle = 0.f;
+            break;
+        case Action::SLASH:
+            player->Attack();
+    }
+    player->Move(newPos, newAngle);
 }

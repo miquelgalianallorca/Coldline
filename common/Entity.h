@@ -6,6 +6,8 @@
 
 class Entity {
 public:
+    enum class EntityType{ PLAYER, ENEMY };
+
     Entity(vec2 _pos, float _vel, GLuint _gfx, float _radius, float _angle, bool _alive);
 
     vec2   GetPos();
@@ -23,10 +25,11 @@ public:
     virtual void Render() = 0;
 
 protected:
-    vec2   pos;
-    float  vel;
-    GLuint gfx;
-    float  radius;
-    float  angle;
-    bool   alive;
+    EntityType entityType;
+    vec2       pos;
+    float      vel;
+    GLuint     gfx;
+    float      radius;
+    float      angle;
+    bool       alive;
 };

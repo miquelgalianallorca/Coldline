@@ -4,7 +4,7 @@
 
 GameStatePlay::GameStatePlay() {
     currentState = StateID::STATE_PLAY;
-    changeState  = false;
+    nextState    = StateID::STATE_PLAY;
     game         = new Game();    
 }
 
@@ -14,14 +14,13 @@ GameStatePlay::~GameStatePlay() {
 }
 
 void GameStatePlay::Input() {
-
+    if (game) inputManager.Run();
 }
 
 void GameStatePlay::Run() {
     game->Run();
     if (game->IsLevelComplete()) {
         nextState   = StateID::STATE_MENU;
-        changeState = true;
     }
 }
 

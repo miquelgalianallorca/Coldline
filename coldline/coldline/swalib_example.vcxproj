@@ -123,6 +123,8 @@
     <ClCompile Include="..\..\common\Game.cpp" />
     <ClCompile Include="..\..\common\GameStateMenu.cpp" />
     <ClCompile Include="..\..\common\GameStatePlay.cpp" />
+    <ClCompile Include="..\..\common\GameInputManager.cpp" />
+    <ClCompile Include="..\..\common\GraphicsEngine.cpp" />
     <ClCompile Include="..\..\common\main.cpp" />
     <ClCompile Include="..\..\common\StateManager.cpp" />
     <ClCompile Include="..\..\common\stdafx.cpp" />
@@ -140,6 +142,8 @@
     <ClInclude Include="..\..\common\GameStateMenu.h" />
     <ClInclude Include="..\..\common\GameStatePlay.h" />
     <ClInclude Include="..\..\common\globals.h" />
+    <ClInclude Include="..\..\common\GameInputManager.h" />
+    <ClInclude Include="..\..\common\GraphicsEngine.h" />
     <ClInclude Include="..\..\common\StateManager.h" />
     <ClInclude Include="..\..\common\stdafx.h" />
     <ClInclude Include="..\..\common\swalib\core.h" />

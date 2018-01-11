@@ -10,6 +10,9 @@ public:
     void Run();
     void Render();
 
+    void Move(vec2 newPos, float angle);
+    void Attack();
+
 private:
     GLuint gfxSlash;
     float  playerRange;

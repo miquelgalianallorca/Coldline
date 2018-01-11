@@ -3,7 +3,7 @@
 #include "GameStatePlay.h"
 
 StateManager::StateManager() {
-    //state = new GameStatePlay();
+    // Start execution with Menu
     state = new GameStateMenu();
 }
 
@@ -15,11 +15,10 @@ void StateManager::Input()  { state->Input();  }
 void StateManager::Render() { state->Render(); }
 
 void StateManager::Run() {
-    if (state->GetChangeState())
+    if (state->GetNextState() != state->GetID())
         ChangeState(state->GetNextState());
     state->Run();
 }
-
 
 void StateManager::ChangeState(StateID stateID) {
     GameState *oldState = state;
@@ -27,7 +26,7 @@ void StateManager::ChangeState(StateID stateID) {
     switch (stateID) {
         case StateID::STATE_MENU: newState = new GameStateMenu(); break;
         case StateID::STATE_PLAY: newState = new GameStatePlay(); break;
-        default:                  newState = new GameStatePlay(); break;
+        default:                  newState = new GameStateMenu(); break;
     }
     state = newState;
     delete oldState;
