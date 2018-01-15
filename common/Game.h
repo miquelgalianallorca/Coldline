@@ -24,23 +24,20 @@ public:
     void  CheckKill(const vec2& playerPos, const float playerRange);
     void  ProcessInput(Action action);
 
+    void SetSlashing(bool value);
+
 private:
     // Game Utilities
     void LoadLevel();
 
-    // Textures
-    GLuint texPlayer;
-    GLuint texFloor;
-    GLuint texEnemy;
-    GLuint texBlood;
-    GLuint texSlash;
-
+    // Entities
     std::vector<Entity*> entities;
     EntityPlayer *player;
 
     // Level
     size_t numDead;
     bool   levelComplete;
+    bool   playerSlashing;
 
     GraphicsEngine graphicsEngine;
 };

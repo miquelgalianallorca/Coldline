@@ -4,28 +4,16 @@
 
 Game::Game() :
     numDead(0),
-    levelComplete(false)
+    levelComplete(false),
+    playerSlashing(false)
 {
-    // Load textures
-    texPlayer = CORE_LoadPNG("data/survivor.png",  false);
-    texFloor  = CORE_LoadPNG("data/tilefloor.png", false);
-    texEnemy  = CORE_LoadPNG("data/rifleman.png",  false);
-    texBlood  = CORE_LoadPNG("data/blood.png",     false);
-    texSlash  = CORE_LoadPNG("data/slash.png",     false);
     // Entities
-    player = new EntityPlayer(vmake(SCR_WIDTH / 2, SCR_HEIGHT / 20), 6.f, texPlayer, 25.f, 90.f, true, 50.f, texSlash);
+    player = new EntityPlayer(vmake(SCR_WIDTH / 2, SCR_HEIGHT / 20), 6.f, 25.f, 90.f, true, 50.f);
     entities.push_back(player);
     LoadLevel();
 }
 
 Game::~Game() {
-    // Textures
-    CORE_UnloadPNG(texPlayer);
-    CORE_UnloadPNG(texFloor);
-    CORE_UnloadPNG(texEnemy);
-    CORE_UnloadPNG(texBlood);
-    CORE_UnloadPNG(texSlash);
-    // Pointers
     for (auto entity : entities) delete entity;
     entities.clear();
 }
@@ -34,13 +22,26 @@ void Game::Render() {
     // Render background
     for (int i = 0; i <= SCR_WIDTH / 128; i++)
         for (int j = 0; j <= SCR_HEIGHT / 128; j++)
-            CORE_RenderCenteredSprite(vmake(i * 128.f + 64.f, j * 128.f + 64.f),
-                vmake(128.f, 128.f), texFloor);
-    graphicsEngine.Draw(GraphicsEngine::Sprite::FLOOR, vmake(i * 128.f + 64.f, j * 128.f + 64.f),
-        vmake(128.f, 128.f), 0.f); //Here
+            graphicsEngine.Draw(GraphicsEngine::Sprite::FLOOR, vmake(i * 128.f + 64.f, j * 128.f + 64.f),
+                vmake(128.f, 128.f), 0.f);
     //Render entities
-    for (auto entity : entities)
-        entity->Render();
+    for (auto entity : entities) {
+        if (entity->GetType() == Entity::EntityType::PLAYER) {
+            graphicsEngine.Draw(GraphicsEngine::Sprite::PLAYER, entity->GetPos(),
+                vmake(entity->GetRadius() * 2, entity->GetRadius() * 2), entity->GetAngle());
+            if (playerSlashing)
+                graphicsEngine.Draw(GraphicsEngine::Sprite::SLASH, entity->GetPos(),
+                    vmake(entity->GetRadius() * 2, entity->GetRadius() * 2), entity->GetAngle());
+        }
+        else if (entity->GetType() == Entity::EntityType::ENEMY) {
+            if (entity->GetAlive())
+                graphicsEngine.Draw(GraphicsEngine::Sprite::ENEMY, entity->GetPos(),
+                    vmake(entity->GetRadius() * 2, entity->GetRadius() * 2), entity->GetAngle());
+            else
+                graphicsEngine.Draw(GraphicsEngine::Sprite::BLOOD, entity->GetPos(),
+                    vmake(entity->GetRadius() * 2, entity->GetRadius() * 2), entity->GetAngle());
+        }
+    }
 }
 
 void Game::Run() {
@@ -52,9 +53,9 @@ bool Game::IsLevelComplete() { return levelComplete; }
 
 void Game::LoadLevel() {
     // TO DO: Read from JSON
-    Entity *enemy1 = new EntityEnemy(vmake(30.f, 100.f), 8.f, texEnemy, 25.f, 0.f, true, texBlood);
-    Entity *enemy2 = new EntityEnemy(vmake(100.f, 400.f), 8.f, texEnemy, 25.f, 0.f, true, texBlood);
-    Entity *enemy3 = new EntityEnemy(vmake(450.f, 350.f), 8.f, texEnemy, 25.f, 0.f, true, texBlood);
+    Entity *enemy1 = new EntityEnemy(vmake(30.f,  100.f), 8.f, 25.f, 0.f, true);
+    Entity *enemy2 = new EntityEnemy(vmake(100.f, 400.f), 8.f, 25.f, 0.f, true);
+    Entity *enemy3 = new EntityEnemy(vmake(450.f, 350.f), 8.f, 25.f, 0.f, true);
     entities.push_back(enemy1);
     entities.push_back(enemy2);
     entities.push_back(enemy3);
@@ -103,3 +104,5 @@ void Game::ProcessInput(Action action) {
     }
     player->Move(newPos, newAngle);
 }
+
+void Game::SetSlashing(bool value) { playerSlashing = value; }
