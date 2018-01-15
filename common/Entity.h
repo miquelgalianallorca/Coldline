@@ -6,7 +6,7 @@
 
 class Entity {
 public:
-    enum class EntityType{ PLAYER, ENEMY };
+    enum class EntityType{ PLAYER, ENEMY, BULLET };
 
     Entity(vec2 _pos, float _vel, float _radius, float _angle, bool _alive);
 

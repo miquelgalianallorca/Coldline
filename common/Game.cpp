@@ -1,6 +1,7 @@
 #include "Game.h"
 #include "EntityPlayer.h"
 #include "EntityEnemy.h"
+#include "EntityBullet.h"
 
 Game::Game() :
     numDead(0),
@@ -15,7 +16,10 @@ Game::Game() :
 
 Game::~Game() {
     for (auto entity : entities) delete entity;
+    player = nullptr;
     entities.clear();
+    enemies.clear();
+    bullets.clear();
 }
 
 void Game::Render() {
@@ -24,24 +28,31 @@ void Game::Render() {
         for (int j = 0; j <= SCR_HEIGHT / 128; j++)
             graphicsEngine.Draw(GraphicsEngine::Sprite::FLOOR, vmake(i * 128.f + 64.f, j * 128.f + 64.f),
                 vmake(128.f, 128.f), 0.f);
-    //Render entities
-    for (auto entity : entities) {
-        if (entity->GetType() == Entity::EntityType::PLAYER) {
-            graphicsEngine.Draw(GraphicsEngine::Sprite::PLAYER, entity->GetPos(),
-                vmake(entity->GetRadius() * 2, entity->GetRadius() * 2), entity->GetAngle());
-            if (playerSlashing)
-                graphicsEngine.Draw(GraphicsEngine::Sprite::SLASH, entity->GetPos(),
-                    vmake(entity->GetRadius() * 2, entity->GetRadius() * 2), entity->GetAngle());
-        }
-        else if (entity->GetType() == Entity::EntityType::ENEMY) {
-            if (entity->GetAlive())
-                graphicsEngine.Draw(GraphicsEngine::Sprite::ENEMY, entity->GetPos(),
-                    vmake(entity->GetRadius() * 2, entity->GetRadius() * 2), entity->GetAngle());
-            else
-                graphicsEngine.Draw(GraphicsEngine::Sprite::BLOOD, entity->GetPos(),
-                    vmake(entity->GetRadius() * 2, entity->GetRadius() * 2), entity->GetAngle());
-        }
+    
+    //================================================================= Entities
+    // Render enemies
+    for (auto enemy : enemies) {
+        if (enemy->GetAlive())
+            graphicsEngine.Draw(GraphicsEngine::Sprite::ENEMY, enemy->GetPos(),
+                vmake(enemy->GetRadius() * 2, enemy->GetRadius() * 2), enemy->GetAngle());
+        else
+            graphicsEngine.Draw(GraphicsEngine::Sprite::BLOOD, enemy->GetPos(),
+                vmake(enemy->GetRadius() * 2, enemy->GetRadius() * 2), enemy->GetAngle());
     }
+
+    // Render player
+    graphicsEngine.Draw(GraphicsEngine::Sprite::PLAYER, player->GetPos(),
+        vmake(player->GetRadius() * 2, player->GetRadius() * 2), player->GetAngle());
+    if (playerSlashing)
+        graphicsEngine.Draw(GraphicsEngine::Sprite::SLASH, player->GetPos(),
+            vmake(player->GetRadius() * 2, player->GetRadius() * 2), player->GetAngle());
+    
+    // Render bullets
+    for (auto bullet : bullets) {
+        // TO DO
+        // ...
+    }
+    //===========================================================================
 }
 
 void Game::Run() {
@@ -53,12 +64,15 @@ bool Game::IsLevelComplete() { return levelComplete; }
 
 void Game::LoadLevel() {
     // TO DO: Read from JSON
-    Entity *enemy1 = new EntityEnemy(vmake(30.f,  100.f), 8.f, 25.f, 0.f, true);
-    Entity *enemy2 = new EntityEnemy(vmake(100.f, 400.f), 8.f, 25.f, 0.f, true);
-    Entity *enemy3 = new EntityEnemy(vmake(450.f, 350.f), 8.f, 25.f, 0.f, true);
+    Entity *enemy1 = new EntityEnemy(vmake(30.f,  100.f), 8.f, 25.f, 0.f, true, 10);
+    Entity *enemy2 = new EntityEnemy(vmake(100.f, 400.f), 8.f, 25.f, 0.f, true, 10);
+    Entity *enemy3 = new EntityEnemy(vmake(450.f, 350.f), 8.f, 25.f, 0.f, true, 10);
     entities.push_back(enemy1);
     entities.push_back(enemy2);
     entities.push_back(enemy3);
+    enemies.push_back(enemy1);
+    enemies.push_back(enemy2);
+    enemies.push_back(enemy3);
 }
 
 float Game::Distance(const vec2 &pos1, const vec2 &pos2) {
@@ -67,14 +81,14 @@ float Game::Distance(const vec2 &pos1, const vec2 &pos2) {
 }
 
 void Game::CheckKill(const vec2& playerPos, const float playerRange) {
-    for (auto entity : entities) {
-        if (entity->GetAlive() && Distance(playerPos, entity->GetPos()) < playerRange) {
-            entity->SetAlive(false);
+    for (auto enemy : enemies) {
+        if (enemy->GetAlive() && Distance(playerPos, enemy->GetPos()) < playerRange) {
+            enemy->SetAlive(false);
             ++numDead;
         }
     }
     // All dead: level cleared
-    if (numDead == entities.size()) levelComplete = true;
+    if (numDead == enemies.size()) levelComplete = true;
 }
 
 void Game::ProcessInput(Action action) {
@@ -106,3 +120,9 @@ void Game::ProcessInput(Action action) {
 }
 
 void Game::SetSlashing(bool value) { playerSlashing = value; }
+
+void Game::AddBullet(vec2 pos, float angle) {
+    Entity *bullet = new EntityBullet(pos, 20.f, 15.f, angle, true);
+    //entities.push_back(bullet);
+    //bullets.push_back(bullet);
+}

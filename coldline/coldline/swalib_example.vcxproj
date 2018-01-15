@@ -118,6 +118,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\common\Entity.cpp" />
+    <ClCompile Include="..\..\common\EntityBullet.cpp" />
     <ClCompile Include="..\..\common\EntityEnemy.cpp" />
     <ClCompile Include="..\..\common\EntityPlayer.cpp" />
     <ClCompile Include="..\..\common\Game.cpp" />
@@ -135,6 +136,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\common\Entity.h" />
+    <ClInclude Include="..\..\common\EntityBullet.h" />
     <ClInclude Include="..\..\common\EntityEnemy.h" />
     <ClInclude Include="..\..\common\EntityPlayer.h" />
     <ClInclude Include="..\..\common\Game.h" />

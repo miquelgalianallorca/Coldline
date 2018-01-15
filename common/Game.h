@@ -13,6 +13,7 @@ class EntityPlayer;
 class Game {
 public:
     enum class Action { MOVE_L, MOVE_U, MOVE_R, MOVE_D, SLASH };
+    enum class Direction { LEFT, UP, RIGHT, DOWN };
 
     Game();
     ~Game();
@@ -23,8 +24,8 @@ public:
     float Distance(const vec2 &pos1, const vec2 &pos2);
     void  CheckKill(const vec2& playerPos, const float playerRange);
     void  ProcessInput(Action action);
-
-    void SetSlashing(bool value);
+    void  SetSlashing(bool value);
+    void  AddBullet(vec2 pos, float angle);
 
 private:
     // Game Utilities
@@ -32,7 +33,9 @@ private:
 
     // Entities
     std::vector<Entity*> entities;
-    EntityPlayer *player;
+    std::vector<Entity*> enemies;  // Only refs
+    std::vector<Entity*> bullets;  // Only refs
+    EntityPlayer *player;          // Only refs
 
     // Level
     size_t numDead;

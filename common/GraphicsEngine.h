@@ -6,7 +6,7 @@
 
 class GraphicsEngine {
 public:
-    enum class Sprite { PLAYER, ENEMY, FLOOR, SLASH, BLOOD };
+    enum class Sprite { PLAYER, ENEMY, FLOOR, SLASH, BLOOD, BULLET };
     
     GraphicsEngine();
     ~GraphicsEngine();
@@ -19,4 +19,5 @@ private:
     GLuint texEnemy;
     GLuint texBlood;
     GLuint texSlash;
+    GLuint texBullet;
 };

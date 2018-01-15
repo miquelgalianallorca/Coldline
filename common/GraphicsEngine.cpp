@@ -6,6 +6,7 @@ GraphicsEngine::GraphicsEngine() {
     texEnemy  = CORE_LoadPNG("data/rifleman.png",  false);
     texBlood  = CORE_LoadPNG("data/blood.png",     false);
     texSlash  = CORE_LoadPNG("data/slash.png",     false);
+    texBullet = CORE_LoadPNG("data/bullet.png",    false);
 }
 
 GraphicsEngine::~GraphicsEngine() {
@@ -14,6 +15,7 @@ GraphicsEngine::~GraphicsEngine() {
     CORE_UnloadPNG(texEnemy);
     CORE_UnloadPNG(texBlood);
     CORE_UnloadPNG(texSlash);
+    CORE_UnloadPNG(texBullet);
 }
 
 void GraphicsEngine::Draw(Sprite sprite, vec2 pos, vec2 size, float angle) {
@@ -24,6 +26,7 @@ void GraphicsEngine::Draw(Sprite sprite, vec2 pos, vec2 size, float angle) {
         case Sprite::FLOOR:  texID = texFloor;  break;
         case Sprite::PLAYER: texID = texPlayer; break;
         case Sprite::SLASH:  texID = texSlash;  break;
+        case Sprite::BULLET: texID = texBullet; break;
     }
     CORE_RenderCenteredRotatedSprite(pos, size, angle, texID);
 }

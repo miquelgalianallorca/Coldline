@@ -5,7 +5,11 @@
 class EntityEnemy : public Entity {
 public:
     EntityEnemy(vec2 _pos, float _vel, float _radius,
-        float _angle, bool _alive);
+        float _angle, bool _alive, int _timeToShoot);
 
     void Run();
+
+private:
+    int timeToShoot;
+    int shootTimer;
 };
