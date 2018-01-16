@@ -21,7 +21,7 @@ public:
     void SetAngle(float _angle);
     void SetAlive(bool  _alive);
 
-    virtual void Run()    = 0;
+    virtual void Run() = 0;
 
 protected:
     EntityType entityType;

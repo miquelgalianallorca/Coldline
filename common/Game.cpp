@@ -49,24 +49,27 @@ void Game::Render() {
     
     // Render bullets
     for (auto bullet : bullets) {
-        // TO DO
-        // ...
+        graphicsEngine.Draw(GraphicsEngine::Sprite::BULLET, bullet->GetPos(),
+            vmake(bullet->GetRadius() * 2, bullet->GetRadius() * 2), bullet->GetAngle());
     }
     //===========================================================================
 }
 
 void Game::Run() {
-    for (auto entity : entities)
+    for (auto entity : entities) {
         entity->Run();
+    }
+    // Can't add to iterator while iterating, so bullets are added later
+    for (auto bullet : bullets) entities.push_back(bullet);
 }
 
 bool Game::IsLevelComplete() { return levelComplete; }
 
 void Game::LoadLevel() {
     // TO DO: Read from JSON
-    Entity *enemy1 = new EntityEnemy(vmake(30.f,  100.f), 8.f, 25.f, 0.f, true, 10);
-    Entity *enemy2 = new EntityEnemy(vmake(100.f, 400.f), 8.f, 25.f, 0.f, true, 10);
-    Entity *enemy3 = new EntityEnemy(vmake(450.f, 350.f), 8.f, 25.f, 0.f, true, 10);
+    Entity *enemy1 = new EntityEnemy(vmake(30.f,  100.f), 8.f, 25.f, 0.f, true, 20);
+    Entity *enemy2 = new EntityEnemy(vmake(100.f, 400.f), 8.f, 25.f, 90.f, true, 20);
+    Entity *enemy3 = new EntityEnemy(vmake(450.f, 350.f), 8.f, 25.f, -90.f, true, 20);
     entities.push_back(enemy1);
     entities.push_back(enemy2);
     entities.push_back(enemy3);
@@ -123,6 +126,5 @@ void Game::SetSlashing(bool value) { playerSlashing = value; }
 
 void Game::AddBullet(vec2 pos, float angle) {
     Entity *bullet = new EntityBullet(pos, 20.f, 15.f, angle, true);
-    //entities.push_back(bullet);
-    //bullets.push_back(bullet);
+    bullets.push_back(bullet);
 }

@@ -11,15 +11,12 @@ EntityEnemy::EntityEnemy(vec2 _pos, float _vel, float _radius, float _angle, boo
 }
 
 void EntityEnemy::Run() {
-    if (shootTimer < timeToShoot) ++shootTimer;
-    else {
-        // Shoot
-        /*Game::Direction dir;
-        if      (angle == 90.f)  dir = Game::Direction::UP;
-        else if (angle == -90.f) dir = Game::Direction::DOWN;
-        else if (angle == 179.f) dir = Game::Direction::LEFT;
-        else                     dir = Game::Direction::RIGHT;*/
-        game->AddBullet(pos, angle);
-        shootTimer = 0;
+    if (alive) {
+        if (shootTimer < timeToShoot) ++shootTimer;
+        else {
+            // Shoot
+            game->AddBullet(pos, angle);
+            shootTimer = 0;
+        }
     }
 }

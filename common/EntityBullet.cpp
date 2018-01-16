@@ -7,5 +7,8 @@ EntityBullet::EntityBullet(vec2 _pos, float _vel, float _radius, float _angle, b
 }
 
 void EntityBullet::Run() {
-    
+    if      (angle ==   0.f) pos = vmake(pos.x + vel, pos.y);
+    else if (angle ==  90.f) pos = vmake(pos.x, pos.y + vel);
+    else if (angle == -90.f) pos = vmake(pos.x, pos.y - vel);
+    else if (angle == 179.f) pos = vmake(pos.x - vel, pos.y);
 }
