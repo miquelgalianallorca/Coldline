@@ -2,6 +2,9 @@
 #include "EntityPlayer.h"
 #include "EntityEnemy.h"
 #include "EntityBullet.h"
+#include "rapidjson\document.h"
+#include <iostream>
+#include <fstream>
 
 Game::Game() :
     numDead(0),
@@ -60,7 +63,11 @@ void Game::Run() {
         entity->Run();
     }
     // Can't add to iterator while iterating, so bullets are added later
-    for (auto bullet : bullets) entities.push_back(bullet);
+    for (auto bullet : bullets) {
+        if (std::find(entities.begin(), entities.end(), bullet) == entities.end()) {
+            entities.push_back(bullet);
+        }
+    }
 }
 
 bool Game::IsLevelComplete() { return levelComplete; }
@@ -68,14 +75,30 @@ bool Game::IsLevelComplete() { return levelComplete; }
 void Game::LoadLevel() {
     // TO DO: Read from JSON
     Entity *enemy1 = new EntityEnemy(vmake(30.f,  100.f), 8.f, 25.f, 0.f, true, 20);
-    Entity *enemy2 = new EntityEnemy(vmake(100.f, 400.f), 8.f, 25.f, 90.f, true, 20);
-    Entity *enemy3 = new EntityEnemy(vmake(450.f, 350.f), 8.f, 25.f, -90.f, true, 20);
+    Entity *enemy2 = new EntityEnemy(vmake(100.f, 400.f), 8.f, 25.f, -90.f, true, 20);
+    Entity *enemy3 = new EntityEnemy(vmake(450.f, 350.f), 8.f, 25.f, 179.f, true, 20);
     entities.push_back(enemy1);
     entities.push_back(enemy2);
     entities.push_back(enemy3);
     enemies.push_back(enemy1);
     enemies.push_back(enemy2);
     enemies.push_back(enemy3);
+
+    // Read file
+    std::ifstream is("data/levels.json", std::ifstream::binary);
+    if (is) {
+        is.seekg(0, is.end);
+        int length = is.tellg();
+        is.seekg(0, is.beg);
+        char * buffer = new char[length];
+        is.read(buffer, length);
+
+        rapidjson::Document document;
+        document.Parse(buffer);
+        //http://rapidjson.org/md_doc_tutorial.html
+        is.close();
+        delete[] buffer;
+    }
 }
 
 float Game::Distance(const vec2 &pos1, const vec2 &pos2) {

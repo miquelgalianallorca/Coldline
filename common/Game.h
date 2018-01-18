@@ -33,9 +33,9 @@ private:
 
     // Entities
     std::vector<Entity*> entities;
-    std::vector<Entity*> enemies;  // Only refs
-    std::vector<Entity*> bullets;  // Only refs
-    EntityPlayer *player;          // Only refs
+    std::vector<Entity*> enemies;
+    std::vector<Entity*> bullets;
+    EntityPlayer *player;
 
     // Level
     size_t numDead;
