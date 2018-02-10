@@ -1,6 +1,6 @@
 #pragma once
 
-enum class StateID { STATE_MENU, STATE_PLAY };
+enum class StateID { STATE_MENU, STATE_PLAY_EASY, STATE_PLAY_NORMAL, STATE_PLAY_HARD };
 
 class GameState {
 public:

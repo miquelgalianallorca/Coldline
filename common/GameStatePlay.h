@@ -7,7 +7,8 @@ class Game;
 
 class GameStatePlay : public GameState {
 public:
-    GameStatePlay();
+	enum class Difficulty { EASY, NORMAL, HARD };
+    GameStatePlay(Difficulty diff);
     ~GameStatePlay();
 
     void Input();

@@ -1,9 +1,26 @@
 {
-    "hello": "world",
-    "t": true ,
-    "f": false,
-    "n": null,
-    "i": 123,
-    "pi": 3.1416,
-    "a": [1, 2, 3, 4]
+	"easy" : {
+		"enemies" : [
+			{ "posX" : 30,  "posY" : 100, "angle" :   0 },
+			{ "posX" : 100, "posY" : 400, "angle" : -90 },
+			{ "posX" : 450, "posY" : 350, "angle" : 179 }
+		]
+	},
+	"normal" : {
+		"enemies" : [
+			{ "posX" : 30,  "posY" : 100, "angle" :   0 },
+			{ "posX" : 100, "posY" : 400, "angle" : -90 },
+			{ "posX" : 450, "posY" : 350, "angle" : 179 },
+			{ "posX" : 550, "posY" : 350, "angle" : -90 }
+		]
+	},
+	"hard" : {
+		"enemies" : [
+			{ "posX" : 30,  "posY" : 100, "angle" :   0 },
+			{ "posX" : 100, "posY" : 400, "angle" : -90 },
+			{ "posX" : 450, "posY" : 350, "angle" : 179 },
+			{ "posX" : 550, "posY" : 350, "angle" : -90 },
+			{ "posX" : 400, "posY" : 200, "angle" : -90 }
+		]
+	}
 }

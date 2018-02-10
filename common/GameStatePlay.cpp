@@ -2,10 +2,22 @@
 #include "globals.h"
 #include "Game.h"
 
-GameStatePlay::GameStatePlay() {
-    currentState = StateID::STATE_PLAY;
-    nextState    = StateID::STATE_PLAY;
-    game         = new Game();    
+GameStatePlay::GameStatePlay(Difficulty diff) {
+	if (diff == Difficulty::EASY) {
+		game = new Game(Game::Difficulty::EASY);
+		currentState = StateID::STATE_PLAY_EASY;
+		nextState    = StateID::STATE_PLAY_EASY;
+	}
+	else if (diff == Difficulty::NORMAL) {
+		game = new Game(Game::Difficulty::NORMAL);
+		currentState = StateID::STATE_PLAY_NORMAL;
+		nextState    = StateID::STATE_PLAY_NORMAL;
+	}
+	else if (diff == Difficulty::HARD) {
+		game = new Game(Game::Difficulty::HARD);
+		currentState = StateID::STATE_PLAY_NORMAL;
+		nextState    = StateID::STATE_PLAY_NORMAL;
+	}
 }
 
 GameStatePlay::~GameStatePlay() {

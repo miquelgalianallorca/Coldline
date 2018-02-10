@@ -3,10 +3,13 @@
 #include "EntityEnemy.h"
 #include "EntityBullet.h"
 #include "rapidjson\document.h"
+#include "rapidjson\filereadstream.h"
+#include <cstdio>
 #include <iostream>
+#include <string>
 #include <fstream>
 
-Game::Game() :
+Game::Game(Difficulty diff) :
     numDead(0),
     levelComplete(false),
     playerSlashing(false)
@@ -14,7 +17,8 @@ Game::Game() :
     // Entities
     player = new EntityPlayer(vmake(SCR_WIDTH / 2, SCR_HEIGHT / 20), 6.f, 25.f, 90.f, true, 50.f);
     entities.push_back(player);
-    LoadLevel();
+    //LoadLevel();
+	LoadLevelJSON(diff);
 }
 
 Game::~Game() {
@@ -73,7 +77,6 @@ void Game::Run() {
 bool Game::IsLevelComplete() { return levelComplete; }
 
 void Game::LoadLevel() {
-    // TO DO: Read from JSON
     Entity *enemy1 = new EntityEnemy(vmake(30.f,  100.f), 8.f, 25.f, 0.f, true, 20);
     Entity *enemy2 = new EntityEnemy(vmake(100.f, 400.f), 8.f, 25.f, -90.f, true, 20);
     Entity *enemy3 = new EntityEnemy(vmake(450.f, 350.f), 8.f, 25.f, 179.f, true, 20);
@@ -83,22 +86,44 @@ void Game::LoadLevel() {
     enemies.push_back(enemy1);
     enemies.push_back(enemy2);
     enemies.push_back(enemy3);
+}
 
-    // Read file
-    std::ifstream is("data/levels.json", std::ifstream::binary);
-    if (is) {
-        is.seekg(0, is.end);
-        int length = is.tellg();
-        is.seekg(0, is.beg);
-        char * buffer = new char[length];
-        is.read(buffer, length);
+void Game::LoadLevelJSON(Difficulty diff) {
+	// Read file
+	FILE* fp = fopen("../data/levels.json", "rb"); // non-Windows use "r"
+	char readBuffer[65536];
+	rapidjson::FileReadStream is(fp, readBuffer, sizeof(readBuffer));
+	rapidjson::Document d;
+	d.ParseStream(is);
+	assert(d.IsObject());
+	fclose(fp);
 
-        rapidjson::Document document;
-        document.Parse(buffer);
-        //http://rapidjson.org/md_doc_tutorial.html
-        is.close();
-        delete[] buffer;
-    }
+	// Parse
+	rapidjson::Value jsonEnemies; // Array of enemies
+	if      (diff == Difficulty::EASY) {
+		assert(d.HasMember("easy"));
+		assert(d["easy"]["enemies"].IsArray());
+		jsonEnemies = d["easy"]["enemies"];
+	}
+	else if (diff == Difficulty::NORMAL) {
+		assert(d.HasMember("normal"));
+		assert(d["normal"]["enemies"].IsArray());
+		jsonEnemies = d["normal"]["enemies"];
+	}
+	else if (diff == Difficulty::HARD) {
+		assert(d.HasMember("hard"));
+		assert(d["hard"]["enemies"].IsArray());
+		jsonEnemies = d["hard"]["enemies"];
+	}
+	// Enemies
+	for (rapidjson::SizeType i = 0; i < jsonEnemies.Size(); ++i) {
+		float posX = jsonEnemies[i]["posX"].GetFloat();
+		float posY = jsonEnemies[i]["posY"].GetFloat();
+		float angle = jsonEnemies[i]["angle"].GetFloat();
+		Entity *enemy = new EntityEnemy(vmake(posX, posY), 8.f, 25.f, angle, true, 20);
+		enemies.push_back(enemy);
+		entities.push_back(enemy);
+	}
 }
 
 float Game::Distance(const vec2 &pos1, const vec2 &pos2) {

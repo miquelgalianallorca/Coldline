@@ -11,9 +11,9 @@ GameStateMenu::GameStateMenu() {
 }
 
 void GameStateMenu::Input() {
-    if (SYS_MouseButonPressed(SYS_MB_RIGHT)) {
-        nextState   = StateID::STATE_PLAY;
-    }
+	if      (SYS_KeyPressed(SYS_1)) nextState = StateID::STATE_PLAY_EASY;
+	else if (SYS_KeyPressed(SYS_2)) nextState = StateID::STATE_PLAY_NORMAL;
+	else if (SYS_KeyPressed(SYS_3)) nextState = StateID::STATE_PLAY_HARD;
 }
 
 void GameStateMenu::Run() {

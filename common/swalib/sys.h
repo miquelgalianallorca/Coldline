@@ -17,6 +17,9 @@
 #define SYS_MB_RIGHT  VK_RBUTTON
 #define SYS_MB_MIDDLE VK_MBUTTON
 
+#define SYS_1  '1'
+#define SYS_2  '2'
+#define SYS_3  '3'
 //#############################################################################
 #elif defined(__APPLE__)
 #include "TargetConditionals.h"

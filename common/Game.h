@@ -1,10 +1,6 @@
 #pragma once
 
 #include "stdafx.h"
-#include "swalib\sys.h"
-#include "swalib\core.h"
-#include "swalib\font.h"
-
 #include "GraphicsEngine.h"
 
 class Entity;
@@ -12,10 +8,11 @@ class EntityPlayer;
 
 class Game {
 public:
-    enum class Action { MOVE_L, MOVE_U, MOVE_R, MOVE_D, SLASH };
-    enum class Direction { LEFT, UP, RIGHT, DOWN };
-
-    Game();
+    enum class Action     { MOVE_L, MOVE_U, MOVE_R, MOVE_D, SLASH };
+    enum class Direction  { LEFT, UP, RIGHT, DOWN };
+	enum class Difficulty { EASY, NORMAL, HARD };
+    
+	Game(Difficulty diff);
     ~Game();
 
     void  Run();
@@ -30,6 +27,7 @@ public:
 private:
     // Game Utilities
     void LoadLevel();
+	void LoadLevelJSON(Difficulty diff);
 
     // Entities
     std::vector<Entity*> entities;
