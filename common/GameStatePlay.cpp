@@ -31,7 +31,7 @@ void GameStatePlay::Input() {
 
 void GameStatePlay::Run() {
     game->Run();
-    if (game->IsLevelComplete()) {
+    if (game->IsLevelComplete() || game->IsPlayerDead()) {
         nextState   = StateID::STATE_MENU;
     }
 }

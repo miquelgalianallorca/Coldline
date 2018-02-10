@@ -17,8 +17,11 @@ public:
 
     void  Run();
     void  Render();
-    bool  IsLevelComplete();
-    float Distance(const vec2 &pos1, const vec2 &pos2);
+    
+	bool  IsLevelComplete();
+	bool  IsPlayerDead();
+
+	float Distance(const vec2 &pos1, const vec2 &pos2);
     void  CheckKill(const vec2& playerPos, const float playerRange);
     void  ProcessInput(Action action);
     void  SetSlashing(bool value);

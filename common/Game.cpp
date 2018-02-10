@@ -176,3 +176,14 @@ void Game::AddBullet(vec2 pos, float angle) {
     Entity *bullet = new EntityBullet(pos, 20.f, 15.f, angle, true);
     bullets.push_back(bullet);
 }
+
+bool Game::IsPlayerDead() {
+	for (auto bullet : bullets) {
+		vec2 posP = player->GetPos();
+		vec2 posB = bullet->GetPos();
+		float rad = player->GetRadius() + bullet->GetRadius();
+		if (Distance(posP, posB) < rad)
+			return true;
+	}
+	return false;
+}
