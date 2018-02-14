@@ -1,12 +1,12 @@
 #include "GraphicsEngine.h"
 
 GraphicsEngine::GraphicsEngine() {
-    texPlayer = CORE_LoadPNG("../data/survivor.png",  false);
-    texFloor  = CORE_LoadPNG("../data/tilefloor.png", false);
-    texEnemy  = CORE_LoadPNG("../data/rifleman.png",  false);
-    texBlood  = CORE_LoadPNG("../data/blood.png",     false);
-    texSlash  = CORE_LoadPNG("../data/slash.png",     false);
-    texBullet = CORE_LoadPNG("../data/bullet.png",    false);
+    texPlayer = CORE_LoadPNG("data/survivor.png",  false);
+    texFloor  = CORE_LoadPNG("data/tilefloor.png", false);
+    texEnemy  = CORE_LoadPNG("data/rifleman.png",  false);
+    texBlood  = CORE_LoadPNG("data/blood.png",     false);
+    texSlash  = CORE_LoadPNG("data/slash.png",     false);
+    texBullet = CORE_LoadPNG("data/bullet.png",    false);
 }
 
 GraphicsEngine::~GraphicsEngine() {

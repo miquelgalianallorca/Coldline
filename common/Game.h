@@ -9,8 +9,8 @@ class EntityPlayer;
 class Game {
 public:
     enum class Action     { MOVE_L, MOVE_U, MOVE_R, MOVE_D, SLASH };
-    enum class Direction  { LEFT, UP, RIGHT, DOWN };
-	enum class Difficulty { EASY, NORMAL, HARD };
+    enum class Direction  { LEFT,   UP,     RIGHT,  DOWN          };
+	enum class Difficulty { EASY,   NORMAL, HARD                  };
     
 	Game(Difficulty diff);
     ~Game();

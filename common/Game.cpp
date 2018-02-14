@@ -1,4 +1,5 @@
 #include "Game.h"
+#include "Component.h"
 #include "EntityPlayer.h"
 #include "EntityEnemy.h"
 #include "EntityBullet.h"
@@ -16,8 +17,9 @@ Game::Game(Difficulty diff) :
 {
     // Entities
     player = new EntityPlayer(vmake(SCR_WIDTH / 2, SCR_HEIGHT / 20), 6.f, 25.f, 90.f, true, 50.f);
-    entities.push_back(player);
-    //LoadLevel();
+	player->AddComponent(new ComponentTransform(player, vmake(SCR_WIDTH / 2, SCR_HEIGHT / 20), 25.f, 90.f));
+	entities.push_back(player);
+    
 	LoadLevelJSON(diff);
 }
 
@@ -90,7 +92,7 @@ void Game::LoadLevel() {
 
 void Game::LoadLevelJSON(Difficulty diff) {
 	// Read file
-	FILE* fp = fopen("../data/levels.json", "rb"); // non-Windows use "r"
+	FILE* fp = fopen("data/levels.json", "rb"); // non-Windows use "r"
 	char readBuffer[65536];
 	rapidjson::FileReadStream is(fp, readBuffer, sizeof(readBuffer));
 	rapidjson::Document d;

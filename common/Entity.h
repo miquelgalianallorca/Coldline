@@ -4,17 +4,20 @@
 #include "swalib\sys.h"
 #include "swalib\core.h"
 
+class  Component;
+struct Message;
+
 class Entity {
 public:
     enum class EntityType{ PLAYER, ENEMY, BULLET };
 
     Entity(vec2 _pos, float _vel, float _radius, float _angle, bool _alive);
 
-    vec2   GetPos();
-    float  GetVel();
-    float  GetRadius();
-    float  GetAngle();
-    bool   GetAlive();
+    vec2       GetPos();
+    float      GetVel();
+    float      GetRadius();
+    float      GetAngle();
+    bool       GetAlive();
     EntityType GetType();
 
     void SetPos  (vec2  _pos);
@@ -23,6 +26,9 @@ public:
 
     virtual void Run() = 0;
 
+	void AddComponent(Component *component);
+	void ReceiveMessage(Message *msg);
+
 protected:
     EntityType entityType;
     vec2       pos;
@@ -30,4 +36,6 @@ protected:
     float      radius;
     float      angle;
     bool       alive;
+
+	std::vector<Component*> components;
 };
