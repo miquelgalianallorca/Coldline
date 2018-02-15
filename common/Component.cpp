@@ -18,10 +18,10 @@ ComponentTransform::ComponentTransform(Entity *_entity, vec2 _pos, float _radius
 {}
 
 void ComponentTransform::ReceiveMessage(Message *msg) {
-	if (auto moveMsg = dynamic_cast<MessageMove*>(msg)) {
+	if (auto moveMsg = dynamic_cast<MessageMove*>(msg))
 		pos    = vadd(pos, moveMsg->amount);
+	if (auto moveMsg = dynamic_cast<MessageSetAngle*>(msg))
 		angle += moveMsg->angle;
-	}
 }
 // ============================================================================
 
@@ -30,8 +30,17 @@ ComponentMove::ComponentMove(Entity *_entity, float _velocity) :
 	Component(_entity),
 	velocity(_velocity)
 {}
+// ============================================================================
 
-void ComponentMove::Run() {
-	//...
+// Render =====================================================================
+ComponentRenderable::ComponentRenderable(Entity *_entity, GraphicsEngine::Drawable _drawable,
+	GraphicsEngine *_graphicsEngine) :
+	Component(_entity),
+	drawable(_drawable),
+	graphicsEngine(_graphicsEngine)
+{}
+
+void ComponentRenderable::Run() {
+	if (graphicsEngine) graphicsEngine->RegisterSprite(&drawable);
 }
 // ============================================================================

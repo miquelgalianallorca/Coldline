@@ -3,6 +3,7 @@
 #include "stdafx.h"
 #include "swalib\sys.h"
 #include "swalib\core.h"
+#include "GraphicsEngine.h"
 
 class  Entity;
 struct Message;
@@ -40,8 +41,20 @@ private:
 class ComponentMove : public Component {
 public:
 	ComponentMove(Entity *_entity, float _velocity);
-	void Run();
+	
+	float GetVelocity() const { return velocity; }
 
 private:
 	float velocity;
+};
+
+class ComponentRenderable : public Component {
+public:	
+	ComponentRenderable(Entity *_entity, GraphicsEngine::Drawable _drawable,
+		GraphicsEngine *_graphicsEngine);
+	void Run();
+
+private:
+	GraphicsEngine::Drawable   drawable;
+	GraphicsEngine*            graphicsEngine;
 };

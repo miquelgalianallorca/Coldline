@@ -10,5 +10,8 @@ struct Message {
 
 struct MessageMove : public Message {
 	vec2  amount;
+};
+
+struct MessageSetAngle : public Message {
 	float angle;
 };

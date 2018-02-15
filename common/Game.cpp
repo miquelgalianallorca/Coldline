@@ -16,8 +16,12 @@ Game::Game(Difficulty diff) :
     playerSlashing(false)
 {
     // Entities
-    player = new EntityPlayer(vmake(SCR_WIDTH / 2, SCR_HEIGHT / 20), 6.f, 25.f, 90.f, true, 50.f);
-	player->AddComponent(new ComponentTransform(player, vmake(SCR_WIDTH / 2, SCR_HEIGHT / 20), 25.f, 90.f));
+    //player = new EntityPlayer(vmake(SCR_WIDTH / 2, SCR_HEIGHT / 20), 6.f, 25.f, 90.f, true, 50.f);
+	player = new Entity();
+	player->AddComponent(new ComponentTransform(player, vmake(SCR_WIDTH / 2, SCR_HEIGHT / 20),
+		25.f, 90.f));
+	player->AddComponent(new ComponentMove(player, 6.f));
+	player->AddComponent(new ComponentRenderable(player, drawable...));
 	entities.push_back(player);
     
 	LoadLevelJSON(diff);
@@ -32,6 +36,9 @@ Game::~Game() {
 }
 
 void Game::Render() {
+	//graphicsEngine.Draw();
+	//graphicsEngine.ClearSprites();
+
     // Render background
     for (int i = 0; i <= SCR_WIDTH / 128; i++)
         for (int j = 0; j <= SCR_HEIGHT / 128; j++)

@@ -36,7 +36,7 @@ private:
     std::vector<Entity*> entities;
     std::vector<Entity*> enemies;
     std::vector<Entity*> bullets;
-    EntityPlayer *player;
+    Entity *player;
 
     // Level
     size_t numDead;
