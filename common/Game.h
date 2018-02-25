@@ -29,6 +29,8 @@ public:
 
 private:
     // Game Utilities
+    void LoadPlayer();
+    void LoadFloor();
     void LoadLevel();
 	void LoadLevelJSON(Difficulty diff);
 

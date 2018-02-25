@@ -48,12 +48,12 @@ void GraphicsEngine::Draw() {
 			case Sprite::SLASH:  texID = texSlash;  break;
 			case Sprite::BULLET: texID = texBullet; break;
 		}
-		for (int i = 0; i < drawable->repeatX; ++i) {
-			for (int j = 0; j < drawable->repeatY; ++j) {
+		for (int i = 0; i < drawable->repeatX; i++) {
+			for (int j = 0; j < drawable->repeatY; j++) {
 				vec2 offset  = vmake(i * drawable->size.x, j * drawable->size.y);
 				vec2 realPos = vadd(drawable->pos, offset);
 				CORE_RenderCenteredRotatedSprite(realPos, drawable->size, drawable->angle, texID);
-			}
+            }
 		}		
 	}
 }

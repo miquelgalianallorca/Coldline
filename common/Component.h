@@ -47,14 +47,3 @@ public:
 private:
 	float velocity;
 };
-
-class ComponentRenderable : public Component {
-public:	
-	ComponentRenderable(Entity *_entity, GraphicsEngine::Drawable _drawable,
-		GraphicsEngine *_graphicsEngine);
-	void Run();
-
-private:
-	GraphicsEngine::Drawable   drawable;
-	GraphicsEngine*            graphicsEngine;
-};

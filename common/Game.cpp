@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "Component.h"
+#include "ComponentRenderable.h"
 #include "EntityPlayer.h"
 #include "EntityEnemy.h"
 #include "EntityBullet.h"
@@ -17,13 +18,8 @@ Game::Game(Difficulty diff) :
 {
     // Entities
     //player = new EntityPlayer(vmake(SCR_WIDTH / 2, SCR_HEIGHT / 20), 6.f, 25.f, 90.f, true, 50.f);
-	player = new Entity();
-	player->AddComponent(new ComponentTransform(player, vmake(SCR_WIDTH / 2, SCR_HEIGHT / 20),
-		25.f, 90.f));
-	player->AddComponent(new ComponentMove(player, 6.f));
-	player->AddComponent(new ComponentRenderable(player, drawable...));
-	entities.push_back(player);
-    
+    LoadFloor();
+    LoadPlayer();
 	LoadLevelJSON(diff);
 }
 
@@ -35,39 +31,64 @@ Game::~Game() {
     bullets.clear();
 }
 
-void Game::Render() {
-	//graphicsEngine.Draw();
-	//graphicsEngine.ClearSprites();
+void Game::LoadFloor() {
+    Entity *floor = new Entity();
+    GraphicsEngine::Drawable drawable;
+    drawable.sprite  = GraphicsEngine::Sprite::FLOOR;
+    drawable.pos     = vmake(0.f, 0.f);
+    drawable.size    = vmake(128.f, 128.f);
+    drawable.angle   = 0.f;
+    drawable.repeatX = SCR_WIDTH  / 128 + 1;
+    drawable.repeatY = SCR_HEIGHT / 128 + 2;
+    floor->AddComponent(new ComponentRenderable(floor, drawable, &graphicsEngine));
+    entities.push_back(floor);
+}
 
-    // Render background
-    for (int i = 0; i <= SCR_WIDTH / 128; i++)
-        for (int j = 0; j <= SCR_HEIGHT / 128; j++)
-            graphicsEngine.Draw(GraphicsEngine::Sprite::FLOOR, vmake(i * 128.f + 64.f, j * 128.f + 64.f),
-                vmake(128.f, 128.f), 0.f);
-    
+void Game::LoadPlayer() {
+    player = new Entity();
+    vec2  playerPos    = vmake(SCR_WIDTH / 2, SCR_HEIGHT / 20);
+    float playerRadius = 25.f;
+    float playerAngle  = 90.f;
+    player->AddComponent(new ComponentTransform(player, playerPos, playerRadius, playerAngle));
+    player->AddComponent(new ComponentMove(player, 6.f));
+
+    GraphicsEngine::Drawable drawable;
+    drawable.sprite = GraphicsEngine::Sprite::PLAYER;
+    drawable.pos    = playerPos;
+    drawable.size   = vmake(playerRadius * 2, playerRadius * 2);
+    drawable.angle  = playerAngle;
+    player->AddComponent(new ComponentRenderable(player, drawable, &graphicsEngine));
+
+    entities.push_back(player);
+}
+
+void Game::Render() {
+	graphicsEngine.Draw();
+	graphicsEngine.ClearSprites();
+
     //================================================================= Entities
     // Render enemies
-    for (auto enemy : enemies) {
-        if (enemy->GetAlive())
-            graphicsEngine.Draw(GraphicsEngine::Sprite::ENEMY, enemy->GetPos(),
-                vmake(enemy->GetRadius() * 2, enemy->GetRadius() * 2), enemy->GetAngle());
-        else
-            graphicsEngine.Draw(GraphicsEngine::Sprite::BLOOD, enemy->GetPos(),
-                vmake(enemy->GetRadius() * 2, enemy->GetRadius() * 2), enemy->GetAngle());
-    }
+    //for (auto enemy : enemies) {
+    //    if (enemy->GetAlive())
+    //        graphicsEngine.Draw(GraphicsEngine::Sprite::ENEMY, enemy->GetPos(),
+    //            vmake(enemy->GetRadius() * 2, enemy->GetRadius() * 2), enemy->GetAngle());
+    //    else
+    //        graphicsEngine.Draw(GraphicsEngine::Sprite::BLOOD, enemy->GetPos(),
+    //            vmake(enemy->GetRadius() * 2, enemy->GetRadius() * 2), enemy->GetAngle());
+    //}
 
-    // Render player
-    graphicsEngine.Draw(GraphicsEngine::Sprite::PLAYER, player->GetPos(),
-        vmake(player->GetRadius() * 2, player->GetRadius() * 2), player->GetAngle());
-    if (playerSlashing)
-        graphicsEngine.Draw(GraphicsEngine::Sprite::SLASH, player->GetPos(),
-            vmake(player->GetRadius() * 2, player->GetRadius() * 2), player->GetAngle());
-    
-    // Render bullets
-    for (auto bullet : bullets) {
-        graphicsEngine.Draw(GraphicsEngine::Sprite::BULLET, bullet->GetPos(),
-            vmake(bullet->GetRadius() * 2, bullet->GetRadius() * 2), bullet->GetAngle());
-    }
+    //// Render player
+    //graphicsEngine.Draw(GraphicsEngine::Sprite::PLAYER, player->GetPos(),
+    //    vmake(player->GetRadius() * 2, player->GetRadius() * 2), player->GetAngle());
+    //if (playerSlashing)
+    //    graphicsEngine.Draw(GraphicsEngine::Sprite::SLASH, player->GetPos(),
+    //        vmake(player->GetRadius() * 2, player->GetRadius() * 2), player->GetAngle());
+    //
+    //// Render bullets
+    //for (auto bullet : bullets) {
+    //    graphicsEngine.Draw(GraphicsEngine::Sprite::BULLET, bullet->GetPos(),
+    //        vmake(bullet->GetRadius() * 2, bullet->GetRadius() * 2), bullet->GetAngle());
+    //}
     //===========================================================================
 }
 
@@ -141,42 +162,42 @@ float Game::Distance(const vec2 &pos1, const vec2 &pos2) {
 }
 
 void Game::CheckKill(const vec2& playerPos, const float playerRange) {
-    for (auto enemy : enemies) {
-        if (enemy->GetAlive() && Distance(playerPos, enemy->GetPos()) < playerRange) {
-            enemy->SetAlive(false);
-            ++numDead;
-        }
-    }
-    // All dead: level cleared
-    if (numDead == enemies.size()) levelComplete = true;
+    //for (auto enemy : enemies) {
+    //    if (enemy->GetAlive() && Distance(playerPos, enemy->GetPos()) < playerRange) {
+    //        enemy->SetAlive(false);
+    //        ++numDead;
+    //    }
+    //}
+    //// All dead: level cleared
+    //if (numDead == enemies.size()) levelComplete = true;
 }
 
 void Game::ProcessInput(Action action) {
-    // Player input
-    vec2  newPos   = player->GetPos();
-    float newAngle = player->GetAngle();
-    float vel      = player->GetVel();
-    switch (action) {
-        case Action::MOVE_U:
-            newPos = vadd(newPos, vmake(0, vel));
-            newAngle = 90.f;
-            break;
-        case Action::MOVE_D:
-            newPos = vadd(newPos, vmake(0, -vel));
-            newAngle = -90.f;
-            break;
-        case Action::MOVE_L:
-            newPos = vadd(newPos, vmake(-vel, 0));
-            newAngle = 179.f;
-            break;
-        case Action::MOVE_R:
-            newPos = vadd(newPos, vmake(vel, 0));
-            newAngle = 0.f;
-            break;
-        case Action::SLASH:
-            player->Attack();
-    }
-    player->Move(newPos, newAngle);
+    //// Player input
+    //vec2  newPos   = player->GetPos();
+    //float newAngle = player->GetAngle();
+    //float vel      = player->GetVel();
+    //switch (action) {
+    //    case Action::MOVE_U:
+    //        newPos = vadd(newPos, vmake(0, vel));
+    //        newAngle = 90.f;
+    //        break;
+    //    case Action::MOVE_D:
+    //        newPos = vadd(newPos, vmake(0, -vel));
+    //        newAngle = -90.f;
+    //        break;
+    //    case Action::MOVE_L:
+    //        newPos = vadd(newPos, vmake(-vel, 0));
+    //        newAngle = 179.f;
+    //        break;
+    //    case Action::MOVE_R:
+    //        newPos = vadd(newPos, vmake(vel, 0));
+    //        newAngle = 0.f;
+    //        break;
+    //    case Action::SLASH:
+    //        player->Attack();
+    //}
+    //player->Move(newPos, newAngle);
 }
 
 void Game::SetSlashing(bool value) { playerSlashing = value; }
@@ -187,12 +208,12 @@ void Game::AddBullet(vec2 pos, float angle) {
 }
 
 bool Game::IsPlayerDead() {
-	for (auto bullet : bullets) {
+	/*for (auto bullet : bullets) {
 		vec2 posP = player->GetPos();
 		vec2 posB = bullet->GetPos();
 		float rad = player->GetRadius() + bullet->GetRadius();
 		if (Distance(posP, posB) < rad)
 			return true;
-	}
+	}*/
 	return false;
 }

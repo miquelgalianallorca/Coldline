@@ -7,16 +7,16 @@ EntityEnemy::EntityEnemy(vec2 _pos, float _vel, float _radius, float _angle, boo
     timeToShoot(_timeToShoot),
     shootTimer(0)
 {
-    entityType = EntityType::ENEMY;
+    //entityType = EntityType::ENEMY;
 }
 
 void EntityEnemy::Run() {
-    if (alive) {
-        if (shootTimer < timeToShoot) ++shootTimer;
-        else {
-            // Shoot
-            game->AddBullet(pos, angle);
-            shootTimer = 0;
-        }
-    }
+    //if (alive) {
+    //    if (shootTimer < timeToShoot) ++shootTimer;
+    //    else {
+    //        // Shoot
+    //        game->AddBullet(pos, angle);
+    //        shootTimer = 0;
+    //    }
+    //}
 }

@@ -8,23 +8,23 @@ EntityPlayer::EntityPlayer(vec2 _pos, float _vel, float _radius, float _angle, b
     playerRange(_playerRange),
     slashTimer(0)
 {
-    entityType = EntityType::PLAYER;
+    //entityType = EntityType::PLAYER;
 }
 
 void EntityPlayer::Run() {
-    if (slashTimer > 0) {
+    /*if (slashTimer > 0) {
         --slashTimer;
         if (slashTimer == 0) game->SetSlashing(false);
-    }
+    }*/
 }
 
 void EntityPlayer::Move(vec2 newPos, float _angle) {
-    angle = _angle;
-    pos   = newPos;
+    /*angle = _angle;
+    pos   = newPos;*/
 }
 
 void EntityPlayer::Attack() {
-    slashTimer = 10;
+    /*slashTimer = 10;
     game->CheckKill(pos, playerRange);
-    game->SetSlashing(true);
+    game->SetSlashing(true);*/
 }
