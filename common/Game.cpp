@@ -17,10 +17,9 @@ Game::Game(Difficulty diff) :
     playerSlashing(false)
 {
     // Entities
-    //player = new EntityPlayer(vmake(SCR_WIDTH / 2, SCR_HEIGHT / 20), 6.f, 25.f, 90.f, true, 50.f);
-    LoadFloor();
     LoadPlayer();
-	LoadLevelJSON(diff);
+    LoadFloor();
+    LoadLevelJSON(diff);
 }
 
 Game::~Game() {
@@ -34,12 +33,13 @@ Game::~Game() {
 void Game::LoadFloor() {
     Entity *floor = new Entity();
     GraphicsEngine::Drawable drawable;
-    drawable.sprite  = GraphicsEngine::Sprite::FLOOR;
-    drawable.pos     = vmake(0.f, 0.f);
-    drawable.size    = vmake(128.f, 128.f);
-    drawable.angle   = 0.f;
-    drawable.repeatX = SCR_WIDTH  / 128 + 1;
-    drawable.repeatY = SCR_HEIGHT / 128 + 2;
+    drawable.sprite   = GraphicsEngine::Sprite::FLOOR;
+    drawable.pos      = vmake(0.f, 0.f);
+    drawable.size     = vmake(128.f, 128.f);
+    drawable.angle    = 0.f;
+    drawable.repeatX  = SCR_WIDTH  / 128 + 1;
+    drawable.repeatY  = SCR_HEIGHT / 128 + 2;
+    drawable.priority = 0;
     floor->AddComponent(new ComponentRenderable(floor, drawable, &graphicsEngine));
     entities.push_back(floor);
 }
@@ -53,10 +53,11 @@ void Game::LoadPlayer() {
     player->AddComponent(new ComponentMove(player, 6.f));
 
     GraphicsEngine::Drawable drawable;
-    drawable.sprite = GraphicsEngine::Sprite::PLAYER;
-    drawable.pos    = playerPos;
-    drawable.size   = vmake(playerRadius * 2, playerRadius * 2);
-    drawable.angle  = playerAngle;
+    drawable.sprite   = GraphicsEngine::Sprite::PLAYER;
+    drawable.pos      = playerPos;
+    drawable.size     = vmake(playerRadius * 2, playerRadius * 2);
+    drawable.angle    = playerAngle;
+    drawable.priority = 1;
     player->AddComponent(new ComponentRenderable(player, drawable, &graphicsEngine));
 
     entities.push_back(player);

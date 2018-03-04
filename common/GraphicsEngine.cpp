@@ -1,4 +1,5 @@
 #include "GraphicsEngine.h"
+#include <algorithm>
 
 GraphicsEngine::GraphicsEngine() {
     texPlayer = CORE_LoadPNG("data/survivor.png",  false);
@@ -38,6 +39,7 @@ void GraphicsEngine::RegisterSprite(Drawable *drawable) {
 void GraphicsEngine::ClearSprites() { registeredDrawables.clear(); }
 
 void GraphicsEngine::Draw() {
+    OrderDrawables();
 	for (auto drawable : registeredDrawables) {
 		GLuint texID;
 		switch (drawable->sprite) {
@@ -58,3 +60,10 @@ void GraphicsEngine::Draw() {
 	}
 }
 
+void GraphicsEngine::OrderDrawables() {
+    std::sort(registeredDrawables.begin(), registeredDrawables.end(),
+        [](const Drawable* const a, const Drawable * const b) -> bool {
+            return a->priority < b->priority;
+        }
+    );
+}

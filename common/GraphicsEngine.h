@@ -14,6 +14,7 @@ public:
 		float  angle;
 		int    repeatX = 1;
 		int    repeatY = 1;
+        int    priority;
 	};
 
     GraphicsEngine();
@@ -33,4 +34,5 @@ private:
     GLuint texBullet;
 	
 	std::vector<Drawable*> registeredDrawables;
+    void OrderDrawables();
 };
