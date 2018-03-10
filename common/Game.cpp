@@ -4,6 +4,7 @@
 #include "EntityPlayer.h"
 #include "EntityEnemy.h"
 #include "EntityBullet.h"
+#include "Message.h"
 #include "rapidjson\document.h"
 #include "rapidjson\filereadstream.h"
 #include <cstdio>
@@ -49,9 +50,8 @@ void Game::LoadPlayer() {
     vec2  playerPos    = vmake(SCR_WIDTH / 2, SCR_HEIGHT / 20);
     float playerRadius = 25.f;
     float playerAngle  = 90.f;
-    player->AddComponent(new ComponentTransform(player, playerPos, playerRadius, playerAngle));
-    player->AddComponent(new ComponentMove(player, 6.f));
-
+    player->AddComponent(new ComponentTransform(player, playerPos, playerRadius, playerAngle, 6.f));
+    
     GraphicsEngine::Drawable drawable;
     drawable.sprite   = GraphicsEngine::Sprite::PLAYER;
     drawable.pos      = playerPos;
@@ -174,31 +174,35 @@ void Game::CheckKill(const vec2& playerPos, const float playerRange) {
 }
 
 void Game::ProcessInput(Action action) {
-    //// Player input
-    //vec2  newPos   = player->GetPos();
-    //float newAngle = player->GetAngle();
-    //float vel      = player->GetVel();
-    //switch (action) {
-    //    case Action::MOVE_U:
-    //        newPos = vadd(newPos, vmake(0, vel));
-    //        newAngle = 90.f;
-    //        break;
-    //    case Action::MOVE_D:
-    //        newPos = vadd(newPos, vmake(0, -vel));
-    //        newAngle = -90.f;
-    //        break;
-    //    case Action::MOVE_L:
-    //        newPos = vadd(newPos, vmake(-vel, 0));
-    //        newAngle = 179.f;
-    //        break;
-    //    case Action::MOVE_R:
-    //        newPos = vadd(newPos, vmake(vel, 0));
-    //        newAngle = 0.f;
-    //        break;
-    //    case Action::SLASH:
-    //        player->Attack();
-    //}
-    //player->Move(newPos, newAngle);
+    MessageMove     * moveMsg = new MessageMove();
+    MessageSetAngle * turnMsg = new MessageSetAngle();
+    switch (action) {
+        case Action::MOVE_U:
+            moveMsg->direction = MessageMove::Dir::UP;
+            turnMsg->angle     = 90.f;
+            break;
+        case Action::MOVE_D:
+            moveMsg->direction = MessageMove::Dir::DOWN;
+            turnMsg->angle     = -90.f;
+            break;
+        case Action::MOVE_L:
+            moveMsg->direction = MessageMove::Dir::LEFT;
+            turnMsg->angle     = 179.f;
+            break;
+        case Action::MOVE_R:
+            moveMsg->direction = MessageMove::Dir::RIGHT;
+            turnMsg->angle     = 0.f;
+            break;
+        case Action::SLASH:
+            MessageAttack * msgAtt = new MessageAttack();
+            player->ReceiveMessage(msgAtt);
+            delete msgAtt;
+            break;
+    }
+    player->ReceiveMessage(moveMsg);
+    player->ReceiveMessage(turnMsg);
+    delete moveMsg;
+    delete turnMsg;
 }
 
 void Game::SetSlashing(bool value) { playerSlashing = value; }

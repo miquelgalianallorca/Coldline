@@ -14,6 +14,7 @@ public:
 	ComponentRenderable(Entity *_entity, GraphicsEngine::Drawable _drawable,
 		GraphicsEngine *_graphicsEngine);
 	void Run();
+    void ReceiveMessage(Message *msg);
 
 private:
 	GraphicsEngine::Drawable   drawable;

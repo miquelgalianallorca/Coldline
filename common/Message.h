@@ -9,9 +9,18 @@ struct Message {
 };
 
 struct MessageMove : public Message {
-	vec2  amount;
+	enum class Dir { UP, DOWN, LEFT, RIGHT };
+    Dir direction;
 };
 
 struct MessageSetAngle : public Message {
 	float angle;
+};
+
+struct MessageAttack : public Message {
+};
+
+struct MessageUpdateDrawable : public Message {
+    vec2  pos;
+    float angle;
 };
