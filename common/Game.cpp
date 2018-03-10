@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "Component.h"
+#include "ComponentPlayer.h"
 #include "ComponentRenderable.h"
 #include "EntityPlayer.h"
 #include "EntityEnemy.h"
@@ -60,6 +61,7 @@ void Game::LoadPlayer() {
     drawable.priority = 1;
     player->AddComponent(new ComponentRenderable(player, drawable, &graphicsEngine));
 
+    player->AddComponent(new ComponentPlayer(player, 25.f, 10));
     entities.push_back(player);
 }
 
@@ -174,35 +176,44 @@ void Game::CheckKill(const vec2& playerPos, const float playerRange) {
 }
 
 void Game::ProcessInput(Action action) {
-    MessageMove     * moveMsg = new MessageMove();
-    MessageSetAngle * turnMsg = new MessageSetAngle();
+    MessageMove     * moveMsg   = nullptr;// = new MessageMove();
+    MessageSetAngle * turnMsg   = nullptr;// = new MessageSetAngle();
+    MessageAttack   * attackMsg = nullptr;
     switch (action) {
+        case Action::SLASH:
+            attackMsg = new MessageAttack();
+            player->ReceiveMessage(attackMsg);
+            break;
         case Action::MOVE_U:
+            moveMsg = new MessageMove();
+            turnMsg = new MessageSetAngle();
             moveMsg->direction = MessageMove::Dir::UP;
             turnMsg->angle     = 90.f;
             break;
         case Action::MOVE_D:
+            moveMsg = new MessageMove();
+            turnMsg = new MessageSetAngle();
             moveMsg->direction = MessageMove::Dir::DOWN;
             turnMsg->angle     = -90.f;
             break;
         case Action::MOVE_L:
+            moveMsg = new MessageMove();
+            turnMsg = new MessageSetAngle();
             moveMsg->direction = MessageMove::Dir::LEFT;
             turnMsg->angle     = 179.f;
             break;
         case Action::MOVE_R:
+            moveMsg = new MessageMove();
+            turnMsg = new MessageSetAngle();
             moveMsg->direction = MessageMove::Dir::RIGHT;
             turnMsg->angle     = 0.f;
             break;
-        case Action::SLASH:
-            MessageAttack * msgAtt = new MessageAttack();
-            player->ReceiveMessage(msgAtt);
-            delete msgAtt;
-            break;
     }
-    player->ReceiveMessage(moveMsg);
-    player->ReceiveMessage(turnMsg);
+    if (moveMsg) player->ReceiveMessage(moveMsg);
+    if (turnMsg) player->ReceiveMessage(turnMsg);
     delete moveMsg;
     delete turnMsg;
+    delete attackMsg;
 }
 
 void Game::SetSlashing(bool value) { playerSlashing = value; }

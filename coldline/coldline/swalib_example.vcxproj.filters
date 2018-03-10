@@ -90,6 +90,9 @@
     <ClCompile Include="..\..\common\ComponentRenderable.cpp">
       <Filter>Source Files\Entity</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\common\ComponentPlayer.cpp">
+      <Filter>Source Files\Entity</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\common\stdafx.h">
@@ -150,6 +153,9 @@
       <Filter>Header Files\Entity</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\ComponentRenderable.h">
+      <Filter>Header Files\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\ComponentPlayer.h">
       <Filter>Header Files\Entity</Filter>
     </ClInclude>
   </ItemGroup>

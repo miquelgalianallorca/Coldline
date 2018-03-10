@@ -4,7 +4,7 @@
 
 EntityPlayer::EntityPlayer(vec2 _pos, float _vel, float _radius, float _angle, bool _alive,
     float _playerRange) :
-    Entity(_pos, _vel, _radius, _angle, _alive),
+    //Entity(_pos, _vel, _radius, _angle, _alive),
     playerRange(_playerRange),
     slashTimer(0)
 {
