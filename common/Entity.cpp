@@ -1,4 +1,6 @@
 #include "Entity.h"
+#include "Game.h"
+#include "Message.h"
 #include "Component.h"
 
 Entity::~Entity() {
@@ -15,8 +17,12 @@ void Entity::AddComponent(Component *component) {
 }
 
 void Entity::ReceiveMessage(Message *msg) {
-	for (auto component : components)
-		component->ReceiveMessage(msg);
+    // Entity messages
+    if (auto MSG = dynamic_cast<MessageSlashFX*>(msg))
+        game->ReceiveMessage(msg);
+    // Component messages
+    for (auto component : components)
+        component->ReceiveMessage(msg);
 }
 
 void Entity::Run() {

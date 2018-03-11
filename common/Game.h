@@ -3,8 +3,9 @@
 #include "stdafx.h"
 #include "GraphicsEngine.h"
 
-class Entity;
-class EntityPlayer;
+class  Entity;
+class  EntityPlayer;
+struct Message;
 
 class Game {
 public:
@@ -17,6 +18,7 @@ public:
 
     void  Run();
     void  Render();
+    void  ReceiveMessage(Message *msg);
     
 	bool  IsLevelComplete();
 	bool  IsPlayerDead();

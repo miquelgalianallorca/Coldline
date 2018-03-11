@@ -33,7 +33,7 @@ Game::~Game() {
 }
 
 void Game::LoadFloor() {
-    Entity *floor = new Entity();
+    Entity *floor = new Entity(this);
     GraphicsEngine::Drawable drawable;
     drawable.sprite   = GraphicsEngine::Sprite::FLOOR;
     drawable.pos      = vmake(0.f, 0.f);
@@ -47,7 +47,7 @@ void Game::LoadFloor() {
 }
 
 void Game::LoadPlayer() {
-    player = new Entity();
+    player = new Entity(this);
     vec2  playerPos    = vmake(SCR_WIDTH / 2, SCR_HEIGHT / 20);
     float playerRadius = 25.f;
     float playerAngle  = 90.f;
@@ -104,6 +104,13 @@ void Game::Run() {
         if (std::find(entities.begin(), entities.end(), bullet) == entities.end()) {
             entities.push_back(bullet);
         }
+    }
+}
+
+void Game::ReceiveMessage(Message *msg) {
+    if (auto MSG = dynamic_cast<MessageSlashFX*>(msg)) {
+        Entity * entitySlash = new Entity(this);
+        //printf("AA");
     }
 }
 
@@ -176,8 +183,8 @@ void Game::CheckKill(const vec2& playerPos, const float playerRange) {
 }
 
 void Game::ProcessInput(Action action) {
-    MessageMove     * moveMsg   = nullptr;// = new MessageMove();
-    MessageSetAngle * turnMsg   = nullptr;// = new MessageSetAngle();
+    MessageMove     * moveMsg   = nullptr;
+    MessageSetAngle * turnMsg   = nullptr;
     MessageAttack   * attackMsg = nullptr;
     switch (action) {
         case Action::SLASH:

@@ -5,7 +5,8 @@
 EntityEnemy::EntityEnemy(vec2 _pos, float _vel, float _radius, float _angle, bool _alive, int _timeToShoot) :
     //Entity(_pos, _vel, _radius, _angle, _alive),
     timeToShoot(_timeToShoot),
-    shootTimer(0)
+    shootTimer(0),
+    Entity(nullptr)
 {
     //entityType = EntityType::ENEMY;
 }

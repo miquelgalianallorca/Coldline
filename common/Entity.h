@@ -5,11 +5,12 @@
 #include "swalib\core.h"
 
 class  Component;
+class  Game;
 struct Message;
 
 class Entity {
 public:
-    Entity() {}
+    Entity(Game *_game) : game(_game) {}
     ~Entity();
 
     bool GetAlive();
@@ -23,4 +24,5 @@ public:
 protected:
     bool alive;
 	std::vector<Component*> components;
+    Game *game;
 };
