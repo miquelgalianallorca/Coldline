@@ -29,5 +29,9 @@ struct MessageUpdateDrawable : public Message {
 // Component to Entity ==========================
 struct MessageAddSlash : public Message {};
 
-struct MessageSlashFX : public Message {};
+struct MessageSlashFX : public Message {
+	vec2  pos;
+	float angle;
+	vec2  size;
+};
 // ==============================================

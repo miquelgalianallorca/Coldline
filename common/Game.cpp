@@ -8,6 +8,7 @@
 #include "Message.h"
 #include "rapidjson\document.h"
 #include "rapidjson\filereadstream.h"
+#include <algorithm>
 #include <cstdio>
 #include <iostream>
 #include <string>
@@ -28,8 +29,8 @@ Game::~Game() {
     for (auto entity : entities) delete entity;
     player = nullptr;
     entities.clear();
-    enemies.clear();
-    bullets.clear();
+    //enemies.clear();
+    //bullets.clear();
 }
 
 void Game::LoadFloor() {
@@ -61,7 +62,7 @@ void Game::LoadPlayer() {
     drawable.priority = 1;
     player->AddComponent(new ComponentRenderable(player, drawable, &graphicsEngine));
 
-    player->AddComponent(new ComponentPlayer(player, 25.f, 10));
+    player->AddComponent(new ComponentPlayer(player, 25.f));
     entities.push_back(player);
 }
 
@@ -96,21 +97,32 @@ void Game::Render() {
 }
 
 void Game::Run() {
-    for (auto entity : entities) {
+	for (auto entity : entitiesToRemove) {
+		entities.erase(std::remove(entities.begin(), entities.end(), entity),
+			entities.end());
+	}
+	for (auto entity : entities) {
         entity->Run();
     }
     // Can't add to iterator while iterating, so bullets are added later
-    for (auto bullet : bullets) {
+    /*for (auto bullet : bullets) {
         if (std::find(entities.begin(), entities.end(), bullet) == entities.end()) {
             entities.push_back(bullet);
         }
-    }
+    }*/
 }
 
 void Game::ReceiveMessage(Message *msg) {
     if (auto MSG = dynamic_cast<MessageSlashFX*>(msg)) {
         Entity * entitySlash = new Entity(this);
-        //printf("AA");
+		GraphicsEngine::Drawable drawable;
+		drawable.sprite   = GraphicsEngine::Sprite::SLASH;
+		drawable.pos      = MSG->pos;
+		drawable.size     = MSG->size;
+		drawable.angle    = MSG->angle;
+		drawable.priority = 2;
+		entitySlash->AddComponent(new ComponentRenderable(entitySlash, drawable, &graphicsEngine));
+		entities.push_back(entitySlash);
     }
 }
 
@@ -123,9 +135,9 @@ void Game::LoadLevel() {
     entities.push_back(enemy1);
     entities.push_back(enemy2);
     entities.push_back(enemy3);
-    enemies.push_back(enemy1);
+    /*enemies.push_back(enemy1);
     enemies.push_back(enemy2);
-    enemies.push_back(enemy3);
+    enemies.push_back(enemy3);*/
 }
 
 void Game::LoadLevelJSON(Difficulty diff) {
@@ -161,7 +173,7 @@ void Game::LoadLevelJSON(Difficulty diff) {
 		float posY = jsonEnemies[i]["posY"].GetFloat();
 		float angle = jsonEnemies[i]["angle"].GetFloat();
 		Entity *enemy = new EntityEnemy(vmake(posX, posY), 8.f, 25.f, angle, true, 20);
-		enemies.push_back(enemy);
+		//enemies.push_back(enemy);
 		entities.push_back(enemy);
 	}
 }
@@ -226,8 +238,8 @@ void Game::ProcessInput(Action action) {
 void Game::SetSlashing(bool value) { playerSlashing = value; }
 
 void Game::AddBullet(vec2 pos, float angle) {
-    Entity *bullet = new EntityBullet(pos, 20.f, 15.f, angle, true);
-    bullets.push_back(bullet);
+    /*Entity *bullet = new EntityBullet(pos, 20.f, 15.f, angle, true);
+    bullets.push_back(bullet);*/
 }
 
 bool Game::IsPlayerDead() {

@@ -38,8 +38,11 @@ private:
 
     // Entities
     std::vector<Entity*> entities;
-    std::vector<Entity*> enemies;
-    std::vector<Entity*> bullets;
+	std::vector<Entity*> entitiesToAdd;
+	std::vector<Entity*> entitiesToRemove;
+
+    //std::vector<Entity*> enemies;
+    //std::vector<Entity*> bullets;
     Entity *player;
 
     // Level

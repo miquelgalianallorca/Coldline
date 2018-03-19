@@ -10,7 +10,7 @@ struct Message;
 
 class Entity {
 public:
-    Entity(Game *_game) : game(_game) {}
+    Entity(Game *_game) : game(_game), alive(true) {}
     ~Entity();
 
     bool GetAlive();
