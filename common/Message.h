@@ -24,14 +24,9 @@ struct MessageUpdateDrawable : public Message {
     vec2  pos;
     float angle;
 };
-// ==============================================
 
-// Component to Entity ==========================
-struct MessageAddSlash : public Message {};
-
-struct MessageSlashFX : public Message {
-	vec2  pos;
-	float angle;
-	vec2  size;
+struct MessageSetFXVisibility : public Message {
+    MessageSetFXVisibility(bool _visibility) :
+        visibility(_visibility) {}
+    bool visibility;
 };
-// ==============================================

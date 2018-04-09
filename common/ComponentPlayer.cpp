@@ -4,28 +4,36 @@
 #include "Message.h"
 
 // Player ===============================================
-ComponentPlayer::ComponentPlayer(Entity *_entity, float _range) :
+ComponentPlayer::ComponentPlayer(Entity *_entity, float _range,
+    int _attackTime) :
     Component(_entity),
-    playerRange(_range)
+    playerRange(_range),
+    isAttacking(false),
+    attackCounter(0),
+    attackTime(_attackTime)
 {}
 
-void ComponentPlayer::Run() {}
+void ComponentPlayer::Run() {
+    if (isAttacking) {
+        --attackCounter;
+        if (attackCounter == 0) {
+            isAttacking = false;
+            MessageSetFXVisibility *msgVis =
+                new MessageSetFXVisibility(false);
+            entity->ReceiveMessage(msgVis);
+            delete msgVis;
+        }
+    }
+}
 
 void ComponentPlayer::ReceiveMessage(Message *msg) {
     if (auto MSG = dynamic_cast<MessageAttack*>(msg)) {
-        MessageSlashFX *msgSlash = new MessageSlashFX();
-        entity->ReceiveMessage(msgSlash);
-        delete msgSlash;
+        attackCounter = attackTime;
+        isAttacking   = true;
+        MessageSetFXVisibility *msgVis = 
+            new MessageSetFXVisibility(true);
+        entity->ReceiveMessage(msgVis);
+        delete msgVis;
     }
-}
-// ======================================================
-
-// Slash ================================================
-void ComponentSlash::Run() {
-    if (slashTimer > 0) --slashTimer;
-}
-
-void ComponentSlash::ReceiveMessage(Message *msg) {
-
 }
 // ======================================================

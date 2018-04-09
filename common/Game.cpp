@@ -43,7 +43,7 @@ void Game::LoadFloor() {
     drawable.repeatX  = SCR_WIDTH  / 128 + 1;
     drawable.repeatY  = SCR_HEIGHT / 128 + 2;
     drawable.priority = 0;
-    floor->AddComponent(new ComponentRenderable(floor, drawable, &graphicsEngine));
+    floor->AddComponent(new ComponentRenderable(floor, drawable, &graphicsEngine, true));
     entities.push_back(floor);
 }
 
@@ -60,47 +60,30 @@ void Game::LoadPlayer() {
     drawable.size     = vmake(playerRadius * 2, playerRadius * 2);
     drawable.angle    = playerAngle;
     drawable.priority = 1;
-    player->AddComponent(new ComponentRenderable(player, drawable, &graphicsEngine));
-
-    player->AddComponent(new ComponentPlayer(player, 25.f));
+    player->AddComponent(new ComponentRenderable(player, drawable, &graphicsEngine, true));
+    
+    GraphicsEngine::Drawable drawableFX = drawable;
+    drawableFX.sprite = GraphicsEngine::Sprite::SLASH;
+    drawableFX.priority = 2;
+    player->AddComponent(new ComponentRenderableFX(player, drawableFX, &graphicsEngine, false));
+    
+    player->AddComponent(new ComponentPlayer(player, 25.f, 10));
     entities.push_back(player);
 }
 
 void Game::Render() {
 	graphicsEngine.Draw();
 	graphicsEngine.ClearSprites();
-
-    //================================================================= Entities
-    // Render enemies
-    //for (auto enemy : enemies) {
-    //    if (enemy->GetAlive())
-    //        graphicsEngine.Draw(GraphicsEngine::Sprite::ENEMY, enemy->GetPos(),
-    //            vmake(enemy->GetRadius() * 2, enemy->GetRadius() * 2), enemy->GetAngle());
-    //    else
-    //        graphicsEngine.Draw(GraphicsEngine::Sprite::BLOOD, enemy->GetPos(),
-    //            vmake(enemy->GetRadius() * 2, enemy->GetRadius() * 2), enemy->GetAngle());
-    //}
-
-    //// Render player
-    //graphicsEngine.Draw(GraphicsEngine::Sprite::PLAYER, player->GetPos(),
-    //    vmake(player->GetRadius() * 2, player->GetRadius() * 2), player->GetAngle());
-    //if (playerSlashing)
-    //    graphicsEngine.Draw(GraphicsEngine::Sprite::SLASH, player->GetPos(),
-    //        vmake(player->GetRadius() * 2, player->GetRadius() * 2), player->GetAngle());
-    //
-    //// Render bullets
-    //for (auto bullet : bullets) {
-    //    graphicsEngine.Draw(GraphicsEngine::Sprite::BULLET, bullet->GetPos(),
-    //        vmake(bullet->GetRadius() * 2, bullet->GetRadius() * 2), bullet->GetAngle());
-    //}
-    //===========================================================================
 }
 
 void Game::Run() {
-	for (auto entity : entitiesToRemove) {
+	// Remove entities
+    for (auto entity : entitiesToRemove) {
 		entities.erase(std::remove(entities.begin(), entities.end(), entity),
 			entities.end());
 	}
+    entitiesToRemove.clear();
+    // Update entities
 	for (auto entity : entities) {
         entity->Run();
     }
@@ -110,20 +93,15 @@ void Game::Run() {
             entities.push_back(bullet);
         }
     }*/
+    // Add entities
+    for (auto entity : entitiesToAdd) {
+        entities.push_back(entity);
+    }
+    entitiesToAdd.clear();
 }
 
 void Game::ReceiveMessage(Message *msg) {
-    if (auto MSG = dynamic_cast<MessageSlashFX*>(msg)) {
-        Entity * entitySlash = new Entity(this);
-		GraphicsEngine::Drawable drawable;
-		drawable.sprite   = GraphicsEngine::Sprite::SLASH;
-		drawable.pos      = MSG->pos;
-		drawable.size     = MSG->size;
-		drawable.angle    = MSG->angle;
-		drawable.priority = 2;
-		entitySlash->AddComponent(new ComponentRenderable(entitySlash, drawable, &graphicsEngine));
-		entities.push_back(entitySlash);
-    }
+    
 }
 
 bool Game::IsLevelComplete() { return levelComplete; }
@@ -142,7 +120,7 @@ void Game::LoadLevel() {
 
 void Game::LoadLevelJSON(Difficulty diff) {
 	// Read file
-	FILE* fp = fopen("data/levels.json", "rb"); // non-Windows use "r"
+	FILE* fp = fopen("../data/levels.json", "rb"); // non-Windows use "r"
 	char readBuffer[65536];
 	rapidjson::FileReadStream is(fp, readBuffer, sizeof(readBuffer));
 	rapidjson::Document d;

@@ -3,14 +3,16 @@
 
 // Render =====================================================================
 ComponentRenderable::ComponentRenderable(Entity *_entity, GraphicsEngine::Drawable _drawable,
-	GraphicsEngine *_graphicsEngine) :
+	GraphicsEngine *_graphicsEngine, bool _isVisible) :
 	Component(_entity),
 	drawable(_drawable),
-	graphicsEngine(_graphicsEngine)
+	graphicsEngine(_graphicsEngine),
+    isVisible(_isVisible)
 {}
 
 void ComponentRenderable::Run() {
-	if (graphicsEngine) graphicsEngine->RegisterSprite(&drawable);
+	if (graphicsEngine && isVisible)
+        graphicsEngine->RegisterSprite(&drawable);
 }
 
 void ComponentRenderable::ReceiveMessage(Message *msg) {
@@ -20,3 +22,10 @@ void ComponentRenderable::ReceiveMessage(Message *msg) {
     }
 }
 // ============================================================================
+
+void ComponentRenderableFX::ReceiveMessage(Message *msg) {
+    ComponentRenderable::ReceiveMessage(msg);
+    if (auto MSG = dynamic_cast<MessageSetFXVisibility*>(msg)) {
+        isVisible = MSG->visibility;
+    }
+}

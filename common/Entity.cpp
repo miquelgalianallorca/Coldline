@@ -17,10 +17,6 @@ void Entity::AddComponent(Component *component) {
 }
 
 void Entity::ReceiveMessage(Message *msg) {
-    // Entity messages
-    if (auto MSG = dynamic_cast<MessageSlashFX*>(msg))
-        game->ReceiveMessage(msg);
-    // Component messages
     for (auto component : components)
         component->ReceiveMessage(msg);
 }
