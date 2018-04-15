@@ -20,6 +20,9 @@ void Entity::ReceiveMessage(Message *msg) {
     if (auto MSG = dynamic_cast<MessageEnemyShoot*>(msg)) {
         game->AddBullet(MSG->pos, MSG->angle);
     }
+    else if (auto MSG = dynamic_cast<MessageRemoveBullet*>(msg)) {
+        game->DeleteEntity(this);
+    }
     else {
         for (auto component : components)
             component->ReceiveMessage(msg);

@@ -3,6 +3,12 @@
 #include "Message.h"
 
 // Bullet ===============================================
+ComponentBullet::ComponentBullet(Entity *_entity, float _angle) :
+    Component(_entity),
+    angle(_angle),
+    lifeSpan(120)
+{}
+
 void ComponentBullet::Run() {
     // Automatic move
     MessageMove * msg = new MessageMove();
@@ -14,6 +20,14 @@ void ComponentBullet::Run() {
     msg->direction = direction;
     entity->ReceiveMessage(msg);
     delete msg;
+
+    // LifeSpan
+    --lifeSpan;
+    if (!lifeSpan) {
+        MessageRemoveBullet* msg = new MessageRemoveBullet();
+        entity->ReceiveMessage(new MessageRemoveBullet());
+        delete msg;
+    }
 }
 
 void ComponentBullet::ReceiveMessage(Message *msg) {}

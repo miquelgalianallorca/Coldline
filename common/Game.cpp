@@ -205,9 +205,9 @@ void Game::Render() {
 // ================================================================
 
 // ECS ============================================================
-void Game::ReceiveMessage(Message *msg) {
-    
-}
+//void Game::ReceiveMessage(Message *msg) {
+//    
+//}
 // ================================================================
 
 // LEVEL ==========================================================
@@ -263,5 +263,9 @@ void Game::AddBullet(vec2 pos, float angle) {
 
     bullet->AddComponent(new ComponentBullet(bullet, angle));
     entitiesToAdd.push_back(bullet);
+}
+
+void Game::DeleteEntity(Entity* entity) {
+    entitiesToRemove.push_back(entity);
 }
 // ================================================================

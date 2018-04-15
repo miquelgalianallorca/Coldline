@@ -7,13 +7,12 @@ struct Message;
 
 class ComponentBullet : public Component {
 public:
-    ComponentBullet(Entity *_entity, float _angle) :
-        Component(_entity),
-        angle(_angle)
-    {}
+    ComponentBullet(Entity *_entity, float _angle);
+
     void Run();
     void ReceiveMessage(Message *msg);
 
 private:
-    float angle;
+    float  angle;
+    size_t lifeSpan;
 };

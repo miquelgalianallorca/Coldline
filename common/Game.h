@@ -23,7 +23,7 @@ public:
     // =============================================
 
     // ECS =========================================
-    void  ReceiveMessage(Message *msg);
+    //void  ReceiveMessage(Message *msg);
     // =============================================
 
     // LEVEL =======================================
@@ -33,6 +33,7 @@ public:
     void  CheckKill(const vec2& playerPos, const float playerRange);
     //void  SetSlashing(bool value);
     void  AddBullet(vec2 pos, float angle);
+    void  DeleteEntity(Entity* entity);
     // =============================================
 
 private:

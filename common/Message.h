@@ -38,3 +38,5 @@ struct MessageEnemyShoot : public Message {
     vec2  pos;
     float angle;
 };
+
+struct MessageRemoveBullet : public Message {};
