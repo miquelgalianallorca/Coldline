@@ -1,11 +1,13 @@
 #include "Game.h"
+
 #include "Component.h"
+#include "ComponentBullet.h"
+#include "ComponentEnemy.h"
 #include "ComponentPlayer.h"
 #include "ComponentRenderable.h"
-#include "EntityPlayer.h"
-#include "EntityEnemy.h"
-#include "EntityBullet.h"
+#include "Entity.h"
 #include "Message.h"
+
 #include "rapidjson\document.h"
 #include "rapidjson\filereadstream.h"
 #include <algorithm>
@@ -15,9 +17,8 @@
 #include <fstream>
 
 Game::Game(Difficulty diff) :
-    numDead(0),
-    levelComplete(false),
-    playerSlashing(false)
+    enemiesLeft(0)
+    //playerSlashing(false)
 {
     // Entities
     LoadPlayer();
@@ -33,6 +34,7 @@ Game::~Game() {
     //bullets.clear();
 }
 
+// LOADING ========================================================
 void Game::LoadFloor() {
     Entity *floor = new Entity(this);
     GraphicsEngine::Drawable drawable;
@@ -52,7 +54,8 @@ void Game::LoadPlayer() {
     vec2  playerPos    = vmake(SCR_WIDTH / 2, SCR_HEIGHT / 20);
     float playerRadius = 25.f;
     float playerAngle  = 90.f;
-    player->AddComponent(new ComponentTransform(player, playerPos, playerRadius, playerAngle, 6.f));
+    player->AddComponent(new ComponentTransform(player, playerPos,
+        playerRadius, playerAngle, 6.f));
     
     GraphicsEngine::Drawable drawable;
     drawable.sprite   = GraphicsEngine::Sprite::PLAYER;
@@ -60,39 +63,134 @@ void Game::LoadPlayer() {
     drawable.size     = vmake(playerRadius * 2, playerRadius * 2);
     drawable.angle    = playerAngle;
     drawable.priority = 1;
-    player->AddComponent(new ComponentRenderable(player, drawable, &graphicsEngine, true));
+    player->AddComponent(new ComponentRenderable(player, drawable,
+        &graphicsEngine, true));
     
     GraphicsEngine::Drawable drawableFX = drawable;
     drawableFX.sprite = GraphicsEngine::Sprite::SLASH;
     drawableFX.priority = 2;
-    player->AddComponent(new ComponentRenderableFX(player, drawableFX, &graphicsEngine, false));
+    player->AddComponent(new ComponentRenderableFX(player,
+        drawableFX, &graphicsEngine, false));
     
     player->AddComponent(new ComponentPlayer(player, 25.f, 10));
     entities.push_back(player);
 }
 
-void Game::Render() {
-	graphicsEngine.Draw();
-	graphicsEngine.ClearSprites();
+void Game::LoadLevelJSON(Difficulty diff) {
+    // Read file
+    FILE* fp = fopen("../data/levels.json", "rb"); // non-Windows use "r"
+    char readBuffer[65536];
+    rapidjson::FileReadStream is(fp, readBuffer, sizeof(readBuffer));
+    rapidjson::Document d;
+    d.ParseStream(is);
+    assert(d.IsObject());
+    fclose(fp);
+
+    // Parse
+    rapidjson::Value jsonEnemies; // Array of enemies
+    if      (diff == Difficulty::EASY) {
+        assert(d.HasMember("easy"));
+        assert(d["easy"]["enemies"].IsArray());
+        jsonEnemies = d["easy"]["enemies"];
+    }
+    else if (diff == Difficulty::NORMAL) {
+        assert(d.HasMember("normal"));
+        assert(d["normal"]["enemies"].IsArray());
+        jsonEnemies = d["normal"]["enemies"];
+    }
+    else if (diff == Difficulty::HARD) {
+        assert(d.HasMember("hard"));
+        assert(d["hard"]["enemies"].IsArray());
+        jsonEnemies = d["hard"]["enemies"];
+    }
+    // Enemies
+    for (rapidjson::SizeType i = 0; i < jsonEnemies.Size(); ++i) {
+        float posX  = jsonEnemies[i]["posX"].GetFloat();
+        float posY  = jsonEnemies[i]["posY"].GetFloat();
+        float angle = jsonEnemies[i]["angle"].GetFloat();
+        LoadEnemy(posX, posY, angle);
+    }
+}
+
+void Game::LoadEnemy(float posX, float posY, float angle) {
+    Entity* enemy = new Entity(this);
+    vec2 pos = vmake(posX, posY);
+    float radius = 25.f;
+    float speed  = 6.f;
+    enemy->AddComponent(new ComponentTransform(enemy, pos,
+        radius, angle, speed));
+
+    GraphicsEngine::Drawable drawable;
+    drawable.sprite   = GraphicsEngine::Sprite::ENEMY;
+    drawable.pos      = pos;
+    drawable.size     = vmake(radius * 2, radius * 2);
+    drawable.angle    = angle;
+    drawable.priority = 1;
+    enemy->AddComponent(new ComponentRenderable(enemy, drawable,
+        &graphicsEngine, true));
+
+    float timeToShoot = 24.f;
+    enemy->AddComponent(new ComponentEnemy(enemy, timeToShoot,
+        pos, angle));
+    
+    ++enemiesLeft;
+    entities.push_back(enemy);
+}
+// ================================================================
+
+// STATE ==========================================================
+void Game::ProcessInput(Action action) {
+    MessageMove     * moveMsg   = nullptr;
+    MessageSetAngle * turnMsg   = nullptr;
+    MessageAttack   * attackMsg = nullptr;
+    switch (action) {
+    case Action::SLASH:
+        attackMsg = new MessageAttack();
+        player->ReceiveMessage(attackMsg);
+        break;
+    case Action::MOVE_U:
+        moveMsg = new MessageMove();
+        turnMsg = new MessageSetAngle();
+        moveMsg->direction = MessageMove::Dir::UP;
+        turnMsg->angle     = 90.f;
+        break;
+    case Action::MOVE_D:
+        moveMsg = new MessageMove();
+        turnMsg = new MessageSetAngle();
+        moveMsg->direction = MessageMove::Dir::DOWN;
+        turnMsg->angle     = -90.f;
+        break;
+    case Action::MOVE_L:
+        moveMsg = new MessageMove();
+        turnMsg = new MessageSetAngle();
+        moveMsg->direction = MessageMove::Dir::LEFT;
+        turnMsg->angle     = 179.f;
+        break;
+    case Action::MOVE_R:
+        moveMsg = new MessageMove();
+        turnMsg = new MessageSetAngle();
+        moveMsg->direction = MessageMove::Dir::RIGHT;
+        turnMsg->angle     = 0.f;
+        break;
+    }
+    if (moveMsg) player->ReceiveMessage(moveMsg);
+    if (turnMsg) player->ReceiveMessage(turnMsg);
+    delete moveMsg;
+    delete turnMsg;
+    delete attackMsg;
 }
 
 void Game::Run() {
-	// Remove entities
+    // Remove entities
     for (auto entity : entitiesToRemove) {
-		entities.erase(std::remove(entities.begin(), entities.end(), entity),
-			entities.end());
-	}
+        entities.erase(std::remove(entities.begin(), entities.end(), entity),
+            entities.end());
+    }
     entitiesToRemove.clear();
     // Update entities
-	for (auto entity : entities) {
+    for (auto entity : entities) {
         entity->Run();
     }
-    // Can't add to iterator while iterating, so bullets are added later
-    /*for (auto bullet : bullets) {
-        if (std::find(entities.begin(), entities.end(), bullet) == entities.end()) {
-            entities.push_back(bullet);
-        }
-    }*/
     // Add entities
     for (auto entity : entitiesToAdd) {
         entities.push_back(entity);
@@ -100,60 +198,32 @@ void Game::Run() {
     entitiesToAdd.clear();
 }
 
+void Game::Render() {
+	graphicsEngine.Draw();
+	graphicsEngine.ClearSprites();
+}
+// ================================================================
+
+// ECS ============================================================
 void Game::ReceiveMessage(Message *msg) {
     
 }
+// ================================================================
 
-bool Game::IsLevelComplete() { return levelComplete; }
-
-void Game::LoadLevel() {
-    Entity *enemy1 = new EntityEnemy(vmake(30.f,  100.f), 8.f, 25.f, 0.f, true, 20);
-    Entity *enemy2 = new EntityEnemy(vmake(100.f, 400.f), 8.f, 25.f, -90.f, true, 20);
-    Entity *enemy3 = new EntityEnemy(vmake(450.f, 350.f), 8.f, 25.f, 179.f, true, 20);
-    entities.push_back(enemy1);
-    entities.push_back(enemy2);
-    entities.push_back(enemy3);
-    /*enemies.push_back(enemy1);
-    enemies.push_back(enemy2);
-    enemies.push_back(enemy3);*/
+// LEVEL ==========================================================
+bool Game::IsLevelComplete() {
+    return enemiesLeft > 0 ? false : true;
 }
 
-void Game::LoadLevelJSON(Difficulty diff) {
-	// Read file
-	FILE* fp = fopen("../data/levels.json", "rb"); // non-Windows use "r"
-	char readBuffer[65536];
-	rapidjson::FileReadStream is(fp, readBuffer, sizeof(readBuffer));
-	rapidjson::Document d;
-	d.ParseStream(is);
-	assert(d.IsObject());
-	fclose(fp);
-
-	// Parse
-	rapidjson::Value jsonEnemies; // Array of enemies
-	if      (diff == Difficulty::EASY) {
-		assert(d.HasMember("easy"));
-		assert(d["easy"]["enemies"].IsArray());
-		jsonEnemies = d["easy"]["enemies"];
-	}
-	else if (diff == Difficulty::NORMAL) {
-		assert(d.HasMember("normal"));
-		assert(d["normal"]["enemies"].IsArray());
-		jsonEnemies = d["normal"]["enemies"];
-	}
-	else if (diff == Difficulty::HARD) {
-		assert(d.HasMember("hard"));
-		assert(d["hard"]["enemies"].IsArray());
-		jsonEnemies = d["hard"]["enemies"];
-	}
-	// Enemies
-	for (rapidjson::SizeType i = 0; i < jsonEnemies.Size(); ++i) {
-		float posX = jsonEnemies[i]["posX"].GetFloat();
-		float posY = jsonEnemies[i]["posY"].GetFloat();
-		float angle = jsonEnemies[i]["angle"].GetFloat();
-		Entity *enemy = new EntityEnemy(vmake(posX, posY), 8.f, 25.f, angle, true, 20);
-		//enemies.push_back(enemy);
-		entities.push_back(enemy);
-	}
+bool Game::IsPlayerDead() {
+    /*for (auto bullet : bullets) {
+    vec2 posP = player->GetPos();
+    vec2 posB = bullet->GetPos();
+    float rad = player->GetRadius() + bullet->GetRadius();
+    if (Distance(posP, posB) < rad)
+    return true;
+    }*/
+    return false;
 }
 
 float Game::Distance(const vec2 &pos1, const vec2 &pos2) {
@@ -172,61 +242,26 @@ void Game::CheckKill(const vec2& playerPos, const float playerRange) {
     //if (numDead == enemies.size()) levelComplete = true;
 }
 
-void Game::ProcessInput(Action action) {
-    MessageMove     * moveMsg   = nullptr;
-    MessageSetAngle * turnMsg   = nullptr;
-    MessageAttack   * attackMsg = nullptr;
-    switch (action) {
-        case Action::SLASH:
-            attackMsg = new MessageAttack();
-            player->ReceiveMessage(attackMsg);
-            break;
-        case Action::MOVE_U:
-            moveMsg = new MessageMove();
-            turnMsg = new MessageSetAngle();
-            moveMsg->direction = MessageMove::Dir::UP;
-            turnMsg->angle     = 90.f;
-            break;
-        case Action::MOVE_D:
-            moveMsg = new MessageMove();
-            turnMsg = new MessageSetAngle();
-            moveMsg->direction = MessageMove::Dir::DOWN;
-            turnMsg->angle     = -90.f;
-            break;
-        case Action::MOVE_L:
-            moveMsg = new MessageMove();
-            turnMsg = new MessageSetAngle();
-            moveMsg->direction = MessageMove::Dir::LEFT;
-            turnMsg->angle     = 179.f;
-            break;
-        case Action::MOVE_R:
-            moveMsg = new MessageMove();
-            turnMsg = new MessageSetAngle();
-            moveMsg->direction = MessageMove::Dir::RIGHT;
-            turnMsg->angle     = 0.f;
-            break;
-    }
-    if (moveMsg) player->ReceiveMessage(moveMsg);
-    if (turnMsg) player->ReceiveMessage(turnMsg);
-    delete moveMsg;
-    delete turnMsg;
-    delete attackMsg;
-}
-
-void Game::SetSlashing(bool value) { playerSlashing = value; }
+//void Game::SetSlashing(bool value) { playerSlashing = value; }
 
 void Game::AddBullet(vec2 pos, float angle) {
-    /*Entity *bullet = new EntityBullet(pos, 20.f, 15.f, angle, true);
-    bullets.push_back(bullet);*/
-}
+    Entity* bullet = new Entity(this);
 
-bool Game::IsPlayerDead() {
-	/*for (auto bullet : bullets) {
-		vec2 posP = player->GetPos();
-		vec2 posB = bullet->GetPos();
-		float rad = player->GetRadius() + bullet->GetRadius();
-		if (Distance(posP, posB) < rad)
-			return true;
-	}*/
-	return false;
+    float radius = 12.f;
+    float speed  = 6.f;
+    bullet->AddComponent(new ComponentTransform(bullet, pos,
+        radius, angle, speed));
+
+    GraphicsEngine::Drawable drawable;
+    drawable.sprite   = GraphicsEngine::Sprite::BULLET;
+    drawable.pos      = pos;
+    drawable.size     = vmake(radius * 2, radius * 2);
+    drawable.angle    = angle;
+    drawable.priority = 2;
+    bullet->AddComponent(new ComponentRenderable(bullet, drawable,
+        &graphicsEngine, true));
+
+    bullet->AddComponent(new ComponentBullet(bullet, angle));
+    entitiesToAdd.push_back(bullet);
 }
+// ================================================================

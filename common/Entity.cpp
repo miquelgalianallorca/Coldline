@@ -17,8 +17,13 @@ void Entity::AddComponent(Component *component) {
 }
 
 void Entity::ReceiveMessage(Message *msg) {
-    for (auto component : components)
-        component->ReceiveMessage(msg);
+    if (auto MSG = dynamic_cast<MessageEnemyShoot*>(msg)) {
+        game->AddBullet(MSG->pos, MSG->angle);
+    }
+    else {
+        for (auto component : components)
+            component->ReceiveMessage(msg);
+    }
 }
 
 void Entity::Run() {

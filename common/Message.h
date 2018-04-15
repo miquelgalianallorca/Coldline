@@ -30,3 +30,11 @@ struct MessageSetFXVisibility : public Message {
         visibility(_visibility) {}
     bool visibility;
 };
+
+struct MessageEnemyShoot : public Message {
+    MessageEnemyShoot(vec2 _pos, float _angle) :
+        pos(_pos),
+        angle(_angle) {}
+    vec2  pos;
+    float angle;
+};

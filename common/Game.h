@@ -16,39 +16,45 @@ public:
 	Game(Difficulty diff);
     ~Game();
 
+    // STATE =======================================
+    void  ProcessInput(Action action);
     void  Run();
     void  Render();
+    // =============================================
+
+    // ECS =========================================
     void  ReceiveMessage(Message *msg);
-    
+    // =============================================
+
+    // LEVEL =======================================
 	bool  IsLevelComplete();
 	bool  IsPlayerDead();
-
 	float Distance(const vec2 &pos1, const vec2 &pos2);
     void  CheckKill(const vec2& playerPos, const float playerRange);
-    void  ProcessInput(Action action);
-    void  SetSlashing(bool value);
+    //void  SetSlashing(bool value);
     void  AddBullet(vec2 pos, float angle);
+    // =============================================
 
 private:
-    // Game Utilities
+    // LOADING =====================================
     void LoadPlayer();
     void LoadFloor();
-    void LoadLevel();
 	void LoadLevelJSON(Difficulty diff);
+    void LoadEnemy(float posX, float posY, float angle);
+    // =============================================
 
-    // Entities
+    // ECS =========================================
     std::vector<Entity*> entities;
 	std::vector<Entity*> entitiesToAdd;
 	std::vector<Entity*> entitiesToRemove;
-
     //std::vector<Entity*> enemies;
     //std::vector<Entity*> bullets;
     Entity *player;
-
-    // Level
-    size_t numDead;
-    bool   levelComplete;
-    bool   playerSlashing;
-
     GraphicsEngine graphicsEngine;
+    // =============================================
+
+    // Level =======================================
+    size_t enemiesLeft;
+    //bool   playerSlashing;
+    // =============================================
 };

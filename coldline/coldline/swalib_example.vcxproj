@@ -118,12 +118,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\common\Component.cpp" />
+    <ClCompile Include="..\..\common\ComponentBullet.cpp" />
+    <ClCompile Include="..\..\common\ComponentEnemy.cpp" />
     <ClCompile Include="..\..\common\ComponentPlayer.cpp" />
     <ClCompile Include="..\..\common\ComponentRenderable.cpp" />
     <ClCompile Include="..\..\common\Entity.cpp" />
-    <ClCompile Include="..\..\common\EntityBullet.cpp" />
-    <ClCompile Include="..\..\common\EntityEnemy.cpp" />
-    <ClCompile Include="..\..\common\EntityPlayer.cpp" />
     <ClCompile Include="..\..\common\Game.cpp" />
     <ClCompile Include="..\..\common\GameStateMenu.cpp" />
     <ClCompile Include="..\..\common\GameStatePlay.cpp" />
@@ -140,12 +139,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\common\Component.h" />
+    <ClInclude Include="..\..\common\ComponentBullet.h" />
+    <ClInclude Include="..\..\common\ComponentEnemy.h" />
     <ClInclude Include="..\..\common\ComponentPlayer.h" />
     <ClInclude Include="..\..\common\ComponentRenderable.h" />
     <ClInclude Include="..\..\common\Entity.h" />
-    <ClInclude Include="..\..\common\EntityBullet.h" />
-    <ClInclude Include="..\..\common\EntityEnemy.h" />
-    <ClInclude Include="..\..\common\EntityPlayer.h" />
     <ClInclude Include="..\..\common\Game.h" />
     <ClInclude Include="..\..\common\GameState.h" />
     <ClInclude Include="..\..\common\GameStateMenu.h" />
