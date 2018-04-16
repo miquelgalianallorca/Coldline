@@ -23,7 +23,8 @@ protected:
 class ComponentTransform : public Component {
 public:
 	ComponentTransform(Entity *_entity, vec2 _pos,
-        float _radius, float _angle, float _speed);
+        float _radius, float _angle, float _speed,
+        bool _canExitScreen);
 	
 	void ReceiveMessage(Message *msg);
 
@@ -36,6 +37,8 @@ private:
 	float radius;
 	float angle;
     float speed;
+    bool  canExitScreen;
 
     void UpdateGraphics();
+    vec2 ClampPos(vec2 pos);
 };

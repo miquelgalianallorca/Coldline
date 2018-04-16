@@ -57,7 +57,7 @@ void Game::LoadPlayer() {
     float radius = 25.f;
     float angle  = 90.f;
     player->AddComponent(new ComponentTransform(player, pos,
-        radius, angle, 6.f));
+        radius, angle, 6.f, false));
     // Graphics
     GraphicsEngine::Drawable drawable;
     drawable.sprite   = GraphicsEngine::Sprite::PLAYER;
@@ -125,7 +125,7 @@ void Game::LoadEnemy(float posX, float posY, float angle) {
     float radius = 25.f;
     float speed  = 6.f;
     enemy->AddComponent(new ComponentTransform(enemy, pos,
-        radius, angle, speed));
+        radius, angle, speed, true));
     // Graphics
     GraphicsEngine::Drawable drawable;
     drawable.sprite   = GraphicsEngine::Sprite::ENEMY;
@@ -228,7 +228,7 @@ void Game::AddBullet(vec2 pos, float angle) {
     float radius = 12.f;
     float speed  = 6.f;
     bullet->AddComponent(new ComponentTransform(bullet, pos,
-        radius, angle, speed));
+        radius, angle, speed, true));
     // Graphics
     GraphicsEngine::Drawable drawable;
     drawable.sprite   = GraphicsEngine::Sprite::BULLET;

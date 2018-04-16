@@ -12,12 +12,13 @@ Component::~Component() {}
 
 // Transform ===================================================================
 ComponentTransform::ComponentTransform(Entity *_entity, vec2 _pos,
-    float _radius, float _angle, float _speed) :
+    float _radius, float _angle, float _speed, bool _canExitScreen) :
 	Component(_entity),
 	pos(_pos),
 	radius(_radius),
 	angle(_angle),
-    speed(_speed)
+    speed(_speed),
+    canExitScreen(_canExitScreen)
 {}
 
 void ComponentTransform::ReceiveMessage(Message *msg) {
@@ -36,6 +37,7 @@ void ComponentTransform::ReceiveMessage(Message *msg) {
                 pos = vadd(pos, vmake(speed, 0));
                 break;
         }
+        if (!canExitScreen) pos = ClampPos(pos);
         UpdateGraphics();
     }
 	if (auto MSG = dynamic_cast<MessageSetAngle*>(msg)) {
@@ -50,5 +52,13 @@ void ComponentTransform::UpdateGraphics() {
     updateDrawableMsg->pos   = pos;
     entity->ReceiveMessage(updateDrawableMsg);
     delete updateDrawableMsg;
+}
+
+vec2 ComponentTransform::ClampPos(vec2 pos) {
+    if (pos.x > SCR_WIDTH - radius) pos.x = SCR_WIDTH - radius;
+    else if (pos.x < radius) pos.x = radius;
+    if (pos.y > SCR_HEIGHT - radius) pos.y = SCR_HEIGHT - radius;
+    else if (pos.y < radius) pos.y = radius;
+    return pos;
 }
 // ============================================================================
