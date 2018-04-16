@@ -2,6 +2,7 @@
 
 #include "stdafx.h"
 #include "GraphicsEngine.h"
+#include "PhysicsEngine.h"
 
 class  Entity;
 class  EntityPlayer;
@@ -31,7 +32,6 @@ public:
 	bool  IsPlayerDead();
 	float Distance(const vec2 &pos1, const vec2 &pos2);
     void  CheckKill(const vec2& playerPos, const float playerRange);
-    //void  SetSlashing(bool value);
     void  AddBullet(vec2 pos, float angle);
     void  DeleteEntity(Entity* entity);
     // =============================================
@@ -48,14 +48,13 @@ private:
     std::vector<Entity*> entities;
 	std::vector<Entity*> entitiesToAdd;
 	std::vector<Entity*> entitiesToRemove;
-    //std::vector<Entity*> enemies;
-    //std::vector<Entity*> bullets;
     Entity *player;
+    
     GraphicsEngine graphicsEngine;
+    PhysicsEngine  physicsEngine;
     // =============================================
 
     // Level =======================================
     size_t enemiesLeft;
-    //bool   playerSlashing;
     // =============================================
 };

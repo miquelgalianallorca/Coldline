@@ -22,8 +22,7 @@ public:
 
 	void RegisterSprite(Drawable *drawable);
 	void ClearSprites();
-    void Draw(Sprite sprite, vec2 pos, vec2 size, float angle); //Delete
-	void Draw();
+    void Draw();
 
 private:
     GLuint texPlayer;

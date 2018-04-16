@@ -2,6 +2,7 @@
 
 #include "Component.h"
 #include "ComponentBullet.h"
+#include "ComponentCollider.h"
 #include "ComponentEnemy.h"
 #include "ComponentPlayer.h"
 #include "ComponentRenderable.h"
@@ -51,27 +52,31 @@ void Game::LoadFloor() {
 
 void Game::LoadPlayer() {
     player = new Entity(this);
-    vec2  playerPos    = vmake(SCR_WIDTH / 2, SCR_HEIGHT / 20);
-    float playerRadius = 25.f;
-    float playerAngle  = 90.f;
-    player->AddComponent(new ComponentTransform(player, playerPos,
-        playerRadius, playerAngle, 6.f));
-    
+    // Transform
+    vec2  pos    = vmake(SCR_WIDTH / 2, SCR_HEIGHT / 20);
+    float radius = 25.f;
+    float angle  = 90.f;
+    player->AddComponent(new ComponentTransform(player, pos,
+        radius, angle, 6.f));
+    // Graphics
     GraphicsEngine::Drawable drawable;
     drawable.sprite   = GraphicsEngine::Sprite::PLAYER;
-    drawable.pos      = playerPos;
-    drawable.size     = vmake(playerRadius * 2, playerRadius * 2);
-    drawable.angle    = playerAngle;
+    drawable.pos      = pos;
+    drawable.size     = vmake(radius * 2, radius * 2);
+    drawable.angle    = angle;
     drawable.priority = 1;
     player->AddComponent(new ComponentRenderable(player, drawable,
         &graphicsEngine, true));
-    
+    // Graphics (SlashFX)
     GraphicsEngine::Drawable drawableFX = drawable;
     drawableFX.sprite = GraphicsEngine::Sprite::SLASH;
     drawableFX.priority = 2;
     player->AddComponent(new ComponentRenderableFX(player,
         drawableFX, &graphicsEngine, false));
-    
+    // Collider
+    player->AddComponent(new ComponentCollider(player, &physicsEngine,
+        PhysicsEngine::Collider(pos, radius, PhysicsEngine::ColliderID::PLAYER)));
+
     player->AddComponent(new ComponentPlayer(player, 25.f, 10));
     entities.push_back(player);
 }
@@ -114,12 +119,13 @@ void Game::LoadLevelJSON(Difficulty diff) {
 
 void Game::LoadEnemy(float posX, float posY, float angle) {
     Entity* enemy = new Entity(this);
+    // Transform
     vec2 pos = vmake(posX, posY);
     float radius = 25.f;
     float speed  = 6.f;
     enemy->AddComponent(new ComponentTransform(enemy, pos,
         radius, angle, speed));
-
+    // Graphics
     GraphicsEngine::Drawable drawable;
     drawable.sprite   = GraphicsEngine::Sprite::ENEMY;
     drawable.pos      = pos;
@@ -128,10 +134,13 @@ void Game::LoadEnemy(float posX, float posY, float angle) {
     drawable.priority = 1;
     enemy->AddComponent(new ComponentRenderable(enemy, drawable,
         &graphicsEngine, true));
-
-    float timeToShoot = 24.f;
+    // Enemy
+    size_t timeToShoot = 24;
     enemy->AddComponent(new ComponentEnemy(enemy, timeToShoot,
         pos, angle));
+    // Collider
+    enemy->AddComponent(new ComponentCollider(enemy, &physicsEngine,
+        PhysicsEngine::Collider(pos, radius, PhysicsEngine::ColliderID::ENEMY)));
     
     ++enemiesLeft;
     entities.push_back(enemy);
@@ -187,14 +196,15 @@ void Game::Run() {
             entities.end());
     }
     entitiesToRemove.clear();
+    
     // Update entities
-    for (auto entity : entities) {
+    for (auto entity : entities)
         entity->Run();
-    }
+    physicsEngine.Run();
+
     // Add entities
-    for (auto entity : entitiesToAdd) {
+    for (auto entity : entitiesToAdd)
         entities.push_back(entity);
-    }
     entitiesToAdd.clear();
 }
 
@@ -242,16 +252,14 @@ void Game::CheckKill(const vec2& playerPos, const float playerRange) {
     //if (numDead == enemies.size()) levelComplete = true;
 }
 
-//void Game::SetSlashing(bool value) { playerSlashing = value; }
-
 void Game::AddBullet(vec2 pos, float angle) {
     Entity* bullet = new Entity(this);
-
+    // Transform
     float radius = 12.f;
     float speed  = 6.f;
     bullet->AddComponent(new ComponentTransform(bullet, pos,
         radius, angle, speed));
-
+    // Graphics
     GraphicsEngine::Drawable drawable;
     drawable.sprite   = GraphicsEngine::Sprite::BULLET;
     drawable.pos      = pos;
@@ -260,6 +268,9 @@ void Game::AddBullet(vec2 pos, float angle) {
     drawable.priority = 2;
     bullet->AddComponent(new ComponentRenderable(bullet, drawable,
         &graphicsEngine, true));
+    // Collider
+    bullet->AddComponent(new ComponentCollider(bullet, &physicsEngine,
+        PhysicsEngine::Collider(pos, radius, PhysicsEngine::ColliderID::BULLET)));
 
     bullet->AddComponent(new ComponentBullet(bullet, angle));
     entitiesToAdd.push_back(bullet);
