@@ -25,9 +25,5 @@ void ComponentEnemy::Run() {
     }
 }
 
-void ComponentEnemy::ReceiveMessage(Message *msg) {
-    /*if (auto MSG = dynamic_cast<MessageAttack*>(msg)) {
-        
-    }*/
-}
+void ComponentEnemy::ReceiveMessage(Message *msg) {}
 // ======================================================

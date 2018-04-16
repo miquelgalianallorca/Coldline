@@ -1,4 +1,5 @@
 #include "ComponentPlayer.h"
+#include "ComponentEnemy.h"
 #include "ComponentRenderable.h"
 #include "Entity.h"
 #include "Message.h"
@@ -34,6 +35,11 @@ void ComponentPlayer::ReceiveMessage(Message *msg) {
             new MessageSetFXVisibility(true);
         entity->ReceiveMessage(msgVis);
         delete msgVis;
+    }
+    else if (auto MSG = dynamic_cast<MessageCollisionBulletPlayer*>(msg)) {
+        MessageKillPlayer* msgKill = new MessageKillPlayer();
+        entity->ReceiveMessage(msgKill);
+        delete msgKill;
     }
 }
 // ======================================================

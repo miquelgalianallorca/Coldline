@@ -39,4 +39,12 @@ struct MessageEnemyShoot : public Message {
     float angle;
 };
 
-struct MessageRemoveBullet : public Message {};
+struct MessageDeleteEntity : public Message {};
+
+struct MessageCollisionBulletPlayer : public Message {};
+
+struct MessageKillPlayer : public Message {};
+
+struct MessageKillEnemy : public Message {
+    vec2 pos;
+};

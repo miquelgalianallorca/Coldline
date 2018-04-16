@@ -29,11 +29,11 @@ public:
 
     // LEVEL =======================================
 	bool  IsLevelComplete();
-	bool  IsPlayerDead();
-	float Distance(const vec2 &pos1, const vec2 &pos2);
-    void  CheckKill(const vec2& playerPos, const float playerRange);
-    void  AddBullet(vec2 pos, float angle);
+    bool  IsPlayerDead() { return isPlayerDead; }
+	void  AddBullet(vec2 pos, float angle);
     void  DeleteEntity(Entity* entity);
+    void  KillPlayer() { isPlayerDead = true; }
+    void  KillEnemy(Entity* enemy, const vec2 pos);
     // =============================================
 
 private:
@@ -56,5 +56,6 @@ private:
 
     // Level =======================================
     size_t enemiesLeft;
+    bool   isPlayerDead;
     // =============================================
 };

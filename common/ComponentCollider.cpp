@@ -18,9 +18,8 @@ void ComponentCollider::Run() {
 }
 
 void ComponentCollider::ReceiveMessage(Message *msg) {
-    /*if (auto MSG = dynamic_cast<MessageUpdateDrawable*>(msg)) {
-        drawable.angle = MSG->angle;
-        drawable.pos   = MSG->pos;
-    }*/
+    if (auto MSG = dynamic_cast<MessageUpdateDrawable*>(msg)) {
+        collider.pos = MSG->pos;
+    }
 }
 // ============================================================================

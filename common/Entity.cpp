@@ -17,16 +17,24 @@ void Entity::AddComponent(Component *component) {
 }
 
 void Entity::ReceiveMessage(Message *msg) {
+    // Entity only messages ===================================
     if (auto MSG = dynamic_cast<MessageEnemyShoot*>(msg)) {
         game->AddBullet(MSG->pos, MSG->angle);
     }
-    else if (auto MSG = dynamic_cast<MessageRemoveBullet*>(msg)) {
+    else if (auto MSG = dynamic_cast<MessageDeleteEntity*>(msg)) {
         game->DeleteEntity(this);
     }
-    else {
-        for (auto component : components)
-            component->ReceiveMessage(msg);
+    else if (auto MSG = dynamic_cast<MessageKillPlayer*>(msg)) {
+        game->KillPlayer();
     }
+    else if (auto MSG = dynamic_cast<MessageKillEnemy*>(msg)) {
+        game->KillEnemy(this, MSG->pos);
+    }
+    // ========================================================
+    // Component messages =====================================
+    for (auto component : components)
+        component->ReceiveMessage(msg);
+    // ========================================================
 }
 
 void Entity::Run() {

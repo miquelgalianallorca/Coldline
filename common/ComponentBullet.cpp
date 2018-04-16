@@ -24,11 +24,17 @@ void ComponentBullet::Run() {
     // LifeSpan
     --lifeSpan;
     if (!lifeSpan) {
-        MessageRemoveBullet* msg = new MessageRemoveBullet();
-        entity->ReceiveMessage(new MessageRemoveBullet());
+        MessageDeleteEntity* msg = new MessageDeleteEntity();
+        entity->ReceiveMessage(new MessageDeleteEntity());
         delete msg;
     }
 }
 
-void ComponentBullet::ReceiveMessage(Message *msg) {}
+void ComponentBullet::ReceiveMessage(Message *msg) {
+    if (auto MSG = dynamic_cast<MessageCollisionBulletPlayer*>(msg)) {
+        MessageDeleteEntity* msgRemoveBullet = new MessageDeleteEntity();
+        entity->ReceiveMessage(msgRemoveBullet);
+        delete msgRemoveBullet;
+    }
+}
 // ======================================================

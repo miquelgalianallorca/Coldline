@@ -18,8 +18,8 @@
 #include <fstream>
 
 Game::Game(Difficulty diff) :
-    enemiesLeft(0)
-    //playerSlashing(false)
+    enemiesLeft(0),
+    isPlayerDead(false)
 {
     // Entities
     LoadPlayer();
@@ -64,18 +64,19 @@ void Game::LoadPlayer() {
     drawable.pos      = pos;
     drawable.size     = vmake(radius * 2, radius * 2);
     drawable.angle    = angle;
-    drawable.priority = 1;
+    drawable.priority = 2;
     player->AddComponent(new ComponentRenderable(player, drawable,
         &graphicsEngine, true));
     // Graphics (SlashFX)
     GraphicsEngine::Drawable drawableFX = drawable;
     drawableFX.sprite = GraphicsEngine::Sprite::SLASH;
-    drawableFX.priority = 2;
+    drawableFX.priority = 3;
     player->AddComponent(new ComponentRenderableFX(player,
         drawableFX, &graphicsEngine, false));
     // Collider
     player->AddComponent(new ComponentCollider(player, &physicsEngine,
-        PhysicsEngine::Collider(pos, radius, PhysicsEngine::ColliderID::PLAYER)));
+        PhysicsEngine::Collider(pos, radius, PhysicsEngine::ColliderID::PLAYER,
+            player)));
 
     player->AddComponent(new ComponentPlayer(player, 25.f, 10));
     entities.push_back(player);
@@ -131,7 +132,7 @@ void Game::LoadEnemy(float posX, float posY, float angle) {
     drawable.pos      = pos;
     drawable.size     = vmake(radius * 2, radius * 2);
     drawable.angle    = angle;
-    drawable.priority = 1;
+    drawable.priority = 2;
     enemy->AddComponent(new ComponentRenderable(enemy, drawable,
         &graphicsEngine, true));
     // Enemy
@@ -140,7 +141,8 @@ void Game::LoadEnemy(float posX, float posY, float angle) {
         pos, angle));
     // Collider
     enemy->AddComponent(new ComponentCollider(enemy, &physicsEngine,
-        PhysicsEngine::Collider(pos, radius, PhysicsEngine::ColliderID::ENEMY)));
+        PhysicsEngine::Collider(pos, radius, PhysicsEngine::ColliderID::ENEMY,
+            enemy)));
     
     ++enemiesLeft;
     entities.push_back(enemy);
@@ -201,6 +203,7 @@ void Game::Run() {
     for (auto entity : entities)
         entity->Run();
     physicsEngine.Run();
+    physicsEngine.Clear();
 
     // Add entities
     for (auto entity : entitiesToAdd)
@@ -214,42 +217,9 @@ void Game::Render() {
 }
 // ================================================================
 
-// ECS ============================================================
-//void Game::ReceiveMessage(Message *msg) {
-//    
-//}
-// ================================================================
-
 // LEVEL ==========================================================
 bool Game::IsLevelComplete() {
     return enemiesLeft > 0 ? false : true;
-}
-
-bool Game::IsPlayerDead() {
-    /*for (auto bullet : bullets) {
-    vec2 posP = player->GetPos();
-    vec2 posB = bullet->GetPos();
-    float rad = player->GetRadius() + bullet->GetRadius();
-    if (Distance(posP, posB) < rad)
-    return true;
-    }*/
-    return false;
-}
-
-float Game::Distance(const vec2 &pos1, const vec2 &pos2) {
-    vec2 dir = vmake(pos2.x - pos1.x, pos2.y - pos1.y);
-    return sqrtf(dir.x * dir.x + dir.y * dir.y);
-}
-
-void Game::CheckKill(const vec2& playerPos, const float playerRange) {
-    //for (auto enemy : enemies) {
-    //    if (enemy->GetAlive() && Distance(playerPos, enemy->GetPos()) < playerRange) {
-    //        enemy->SetAlive(false);
-    //        ++numDead;
-    //    }
-    //}
-    //// All dead: level cleared
-    //if (numDead == enemies.size()) levelComplete = true;
 }
 
 void Game::AddBullet(vec2 pos, float angle) {
@@ -270,7 +240,8 @@ void Game::AddBullet(vec2 pos, float angle) {
         &graphicsEngine, true));
     // Collider
     bullet->AddComponent(new ComponentCollider(bullet, &physicsEngine,
-        PhysicsEngine::Collider(pos, radius, PhysicsEngine::ColliderID::BULLET)));
+        PhysicsEngine::Collider(pos, radius, PhysicsEngine::ColliderID::BULLET,
+            bullet)));
 
     bullet->AddComponent(new ComponentBullet(bullet, angle));
     entitiesToAdd.push_back(bullet);
@@ -278,5 +249,22 @@ void Game::AddBullet(vec2 pos, float angle) {
 
 void Game::DeleteEntity(Entity* entity) {
     entitiesToRemove.push_back(entity);
+}
+
+void Game::KillEnemy(Entity* enemy, const vec2 pos) {
+    DeleteEntity(enemy);
+    --enemiesLeft;
+
+    // Blood FX
+    GraphicsEngine::Drawable drawableFX;
+    drawableFX.size   = vmake(70.f, 70.f);
+    drawableFX.pos    = pos;
+    drawableFX.sprite = GraphicsEngine::Sprite::BLOOD;
+    drawableFX.priority = 1;
+
+    Entity* blood = new Entity(this);
+    blood->AddComponent(new ComponentRenderableFX(blood,
+        drawableFX, &graphicsEngine, true));
+    entities.push_back(blood);
 }
 // ================================================================
