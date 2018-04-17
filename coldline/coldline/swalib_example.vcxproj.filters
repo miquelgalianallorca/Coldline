@@ -120,6 +120,15 @@
     <ClCompile Include="..\..\common\Button.cpp">
       <Filter>Source Files\Menu</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\common\MenuDifficulty.cpp">
+      <Filter>Source Files\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\MenuMain.cpp">
+      <Filter>Source Files\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\MenuLanguage.cpp">
+      <Filter>Source Files\Menu</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\common\stdafx.h">
@@ -198,6 +207,15 @@
       <Filter>Header Files\Menu</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\Button.h">
+      <Filter>Header Files\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\MenuDifficulty.h">
+      <Filter>Header Files\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\MenuMain.h">
+      <Filter>Header Files\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\MenuLanguage.h">
       <Filter>Header Files\Menu</Filter>
     </ClInclude>
   </ItemGroup>

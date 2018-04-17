@@ -14,7 +14,7 @@ GameStateMenu::GameStateMenu() {
     nextState    = StateID::STATE_MENU;
 
     menuManager  = new MenuManager();
-    menuManager->SetMenu(MenuManager::MenuID::DIFF);
+    menuManager->SetMenu(MenuManager::MenuID::MAIN);
 }
 
 GameStateMenu::~GameStateMenu() {
@@ -24,26 +24,24 @@ GameStateMenu::~GameStateMenu() {
 
 void GameStateMenu::Input() {
     inputManager.Run();
-
-	/*if      (SYS_KeyPressed(SYS_1)) nextState = StateID::STATE_PLAY_EASY;
-	else if (SYS_KeyPressed(SYS_2)) nextState = StateID::STATE_PLAY_NORMAL;
-	else if (SYS_KeyPressed(SYS_3)) nextState = StateID::STATE_PLAY_HARD;*/
 }
 
 void GameStateMenu::Run() {
     if (menuManager) {
         menuManager->Run();
-        if (menuManager->GetChangeState())
-            nextState = StateID::STATE_PLAY_NORMAL;
-        // TO DO...
+        if (menuManager->GetChangeState()) {
+            MenuManager::DiffOpt diff = menuManager->GetDifficulty();
+            if (diff == MenuManager::DiffOpt::EASY)
+                nextState = StateID::STATE_PLAY_EASY;
+            else if (diff == MenuManager::DiffOpt::NORMAL)
+                nextState = StateID::STATE_PLAY_NORMAL;
+            else if (diff == MenuManager::DiffOpt::HARD)
+                nextState = StateID::STATE_PLAY_HARD;
+        }
     }
 }
 
 void GameStateMenu::Render() {
     if (menuManager)
-        menuManager->Render();    
-    /*FONT_DrawString(vmake(SCR_WIDTH / 2 - 80, SCR_HEIGHT / 2 + 50), "COLDLINE");
-    FONT_DrawString(vmake(SCR_WIDTH / 2 - 80, SCR_HEIGHT / 2 - 50), "1. EASY");
-    FONT_DrawString(vmake(SCR_WIDTH / 2 - 80, SCR_HEIGHT / 2 - 70), "2. NORMAL");
-    FONT_DrawString(vmake(SCR_WIDTH / 2 - 80, SCR_HEIGHT / 2 - 90), "3. HARD");*/
+        menuManager->Render();
 }

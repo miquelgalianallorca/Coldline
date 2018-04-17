@@ -4,17 +4,17 @@
 Button::Button(vec2 _pos, std::string _text,
     std::function<void()> _executeFunction) :
     pos(_pos),
-    text(_text),
     executeFunction(_executeFunction)
 {
-    activeText  = text + " - ";
-    currentText = text;
+    inactiveText = "   " + _text;
+    activeText   = " - " + _text;
+    currentText = inactiveText;
 }
 
 void Button::SetActive(bool value) {
     isActive = value;
     if (value) currentText = activeText;
-    else       currentText = text;
+    else       currentText = inactiveText;
 }
 
 void Button::Render() {

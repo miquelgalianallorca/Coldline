@@ -14,6 +14,7 @@ public:
     ~MenuManager();
 
     void SetMenu(MenuID ID);
+    void Quit();
 
     void ProcessInput(Action action);
     void Run();

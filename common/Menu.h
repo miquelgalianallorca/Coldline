@@ -25,16 +25,3 @@ protected:
     vec2 pos;
     std::string title;
 };
-
-class DifficultyMenu : public Menu {
-public:
-    DifficultyMenu(vec2 _pos, std::string _title);
-
-    void ProcessInput(const MenuManager::Action &action);
-    void Run();
-    void Render();
-
-    void SetDiffEasy();
-    void SetDiffNormal();
-    void SetDiffHard();
-};

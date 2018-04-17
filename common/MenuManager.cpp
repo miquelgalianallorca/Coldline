@@ -1,6 +1,8 @@
 #include "MenuManager.h"
 #include "stdafx.h"
-#include "Menu.h"
+#include "MenuDifficulty.h"
+#include "MenuLanguage.h"
+#include "MenuMain.h"
 
 MenuManager::MenuManager() :
     currentMenu(nullptr),
@@ -17,13 +19,19 @@ void MenuManager::SetMenu(MenuID ID) {
     currentMenu = nullptr;
     // Load new menu
     if (ID == MenuID::MAIN) {
-        //currentMenu = new MainMenu();
-        // HERE!
+        currentMenu = new MenuMain(
+            vmake(SCR_WIDTH / 2 - 80, SCR_HEIGHT / 2 + 50),
+            std::string("COLDLINE"));
     }
     else if (ID == MenuID::DIFF) {
-        currentMenu = new DifficultyMenu(
+        currentMenu = new MenuDifficulty(
             vmake(SCR_WIDTH / 2 - 80, SCR_HEIGHT / 2 + 50),
             std::string("DIFFICULTY"));
+    }
+    else if (ID == MenuID::LANG) {
+        currentMenu = new MenuDifficulty(
+            vmake(SCR_WIDTH / 2 - 80, SCR_HEIGHT / 2 + 50),
+            std::string("LANGUAGE"));
     }
 }
 
@@ -40,4 +48,8 @@ void MenuManager::Run() {
 void MenuManager::Render() {
     if (currentMenu)
         currentMenu->Render();
+}
+
+void MenuManager::Quit() {
+
 }

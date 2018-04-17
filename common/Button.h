@@ -21,7 +21,7 @@ public:
 private:
     bool isActive;
     vec2 pos;
-    std::string text;
+    std::string inactiveText;
     std::string activeText;
     std::string currentText;
     std::function<void()> executeFunction;
