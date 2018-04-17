@@ -3,8 +3,6 @@
 #include "GameState.h"
 #include "GameInputManager.h"
 
-class Game;
-
 class GameStatePlay : public GameState {
 public:
 	enum class Difficulty { EASY, NORMAL, HARD };

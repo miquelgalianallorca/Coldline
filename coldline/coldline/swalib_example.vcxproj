@@ -130,6 +130,9 @@
     <ClCompile Include="..\..\common\GameInputManager.cpp" />
     <ClCompile Include="..\..\common\GraphicsEngine.cpp" />
     <ClCompile Include="..\..\common\main.cpp" />
+    <ClCompile Include="..\..\common\Menu.cpp" />
+    <ClCompile Include="..\..\common\MenuInputManager.cpp" />
+    <ClCompile Include="..\..\common\MenuManager.cpp" />
     <ClCompile Include="..\..\common\Message.cpp" />
     <ClCompile Include="..\..\common\PhysicsEngine.cpp" />
     <ClCompile Include="..\..\common\StateManager.cpp" />
@@ -154,6 +157,9 @@
     <ClInclude Include="..\..\common\globals.h" />
     <ClInclude Include="..\..\common\GameInputManager.h" />
     <ClInclude Include="..\..\common\GraphicsEngine.h" />
+    <ClInclude Include="..\..\common\Menu.h" />
+    <ClInclude Include="..\..\common\MenuInputManager.h" />
+    <ClInclude Include="..\..\common\MenuManager.h" />
     <ClInclude Include="..\..\common\Message.h" />
     <ClInclude Include="..\..\common\PhysicsEngine.h" />
     <ClInclude Include="..\..\common\StateManager.h" />

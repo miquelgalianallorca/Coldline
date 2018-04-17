@@ -23,10 +23,6 @@ public:
     void  Render();
     // =============================================
 
-    // ECS =========================================
-    //void  ReceiveMessage(Message *msg);
-    // =============================================
-
     // LEVEL =======================================
 	bool  IsLevelComplete();
     bool  IsPlayerDead() { return isPlayerDead; }

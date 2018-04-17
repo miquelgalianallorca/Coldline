@@ -31,6 +31,12 @@
     <Filter Include="Source Files\Entity">
       <UniqueIdentifier>{f282ee5a-a678-429f-9046-a86e7787d8d3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Input">
+      <UniqueIdentifier>{ef04d7b7-1abc-4045-8d62-509533569c2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Input">
+      <UniqueIdentifier>{f7671442-2fa5-4ded-807c-b499282e932b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\common\stdafx.cpp">
@@ -66,9 +72,6 @@
     <ClCompile Include="..\..\common\Entity.cpp">
       <Filter>Source Files\Entity</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\common\GameInputManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\common\GraphicsEngine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -95,6 +98,18 @@
     </ClCompile>
     <ClCompile Include="..\..\common\ComponentCollider.cpp">
       <Filter>Source Files\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\GameInputManager.cpp">
+      <Filter>Source Files\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\MenuInputManager.cpp">
+      <Filter>Source Files\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\MenuManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\Menu.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -134,9 +149,6 @@
     <ClInclude Include="..\..\common\Entity.h">
       <Filter>Header Files\Entity</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\common\GameInputManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\common\GraphicsEngine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -163,6 +175,18 @@
     </ClInclude>
     <ClInclude Include="..\..\common\ComponentCollider.h">
       <Filter>Header Files\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\MenuInputManager.h">
+      <Filter>Header Files\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\GameInputManager.h">
+      <Filter>Header Files\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\MenuManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\Menu.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

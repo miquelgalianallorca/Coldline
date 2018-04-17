@@ -18,4 +18,7 @@ void GameInputManager::Run() {
 	if (SYS_MouseButonPressed(SYS_MB_LEFT) || SYS_KeyPressed(SYS_KEY_SPACE)) {
 		game->ProcessInput(Game::Action::SLASH);
 	}
+    if (SYS_KeyPressed(SYS_KEY_ESC)) {
+        game->KillPlayer();
+    }
 }

@@ -11,6 +11,7 @@ void SetupRender();
 // Definition of externals (globals.h)
 StateManager * stateManager = nullptr;
 Game         * game         = nullptr;
+MenuManager  * menuManager  = nullptr;
 
 int Main(void) {
     FONT_Init();
