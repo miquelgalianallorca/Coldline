@@ -117,6 +117,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\common\Button.cpp" />
     <ClCompile Include="..\..\common\Component.cpp" />
     <ClCompile Include="..\..\common\ComponentBullet.cpp" />
     <ClCompile Include="..\..\common\ComponentCollider.cpp" />
@@ -143,6 +144,7 @@
     <ClCompile Include="..\..\common\swalib\sys_win.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\common\Button.h" />
     <ClInclude Include="..\..\common\Component.h" />
     <ClInclude Include="..\..\common\ComponentBullet.h" />
     <ClInclude Include="..\..\common\ComponentCollider.h" />

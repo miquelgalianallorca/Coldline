@@ -37,6 +37,12 @@
     <Filter Include="Header Files\Input">
       <UniqueIdentifier>{f7671442-2fa5-4ded-807c-b499282e932b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Menu">
+      <UniqueIdentifier>{dec9bc39-3609-4199-9145-ea1820bbf9ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Menu">
+      <UniqueIdentifier>{e8515fe2-4875-407d-b1ba-54672585d8ae}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\common\stdafx.cpp">
@@ -105,11 +111,14 @@
     <ClCompile Include="..\..\common\MenuInputManager.cpp">
       <Filter>Source Files\Input</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\common\MenuManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\common\Menu.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\MenuManager.cpp">
+      <Filter>Source Files\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\Button.cpp">
+      <Filter>Source Files\Menu</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -182,11 +191,14 @@
     <ClInclude Include="..\..\common\GameInputManager.h">
       <Filter>Header Files\Input</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\common\MenuManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\common\Menu.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\MenuManager.h">
+      <Filter>Header Files\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\Button.h">
+      <Filter>Header Files\Menu</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

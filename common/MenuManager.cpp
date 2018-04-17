@@ -13,8 +13,17 @@ MenuManager::~MenuManager() {
 }
 
 void MenuManager::SetMenu(MenuID ID) {
-    if (ID == MenuID::DIFF) {
-        currentMenu = new DifficultyMenu();
+    delete currentMenu;
+    currentMenu = nullptr;
+    // Load new menu
+    if (ID == MenuID::MAIN) {
+        //currentMenu = new MainMenu();
+        // HERE!
+    }
+    else if (ID == MenuID::DIFF) {
+        currentMenu = new DifficultyMenu(
+            vmake(SCR_WIDTH / 2 - 80, SCR_HEIGHT / 2 + 50),
+            std::string("DIFFICULTY"));
     }
 }
 
