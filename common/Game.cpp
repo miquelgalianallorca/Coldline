@@ -7,6 +7,8 @@
 #include "ComponentPlayer.h"
 #include "ComponentRenderable.h"
 #include "Entity.h"
+#include "globals.h"
+#include "MenuManager.h"
 #include "Message.h"
 
 #include "rapidjson\document.h"
@@ -19,7 +21,8 @@
 
 Game::Game(Difficulty diff) :
     enemiesLeft(0),
-    isPlayerDead(false)
+    isPlayerDead(false),
+    isInGameMenuOpen(false)
 {
     // Entities
     LoadPlayer();
@@ -151,6 +154,7 @@ void Game::LoadEnemy(float posX, float posY, float angle) {
 
 // STATE ==========================================================
 void Game::ProcessInput(Action action) {
+    //if (!isInGameMenuOpen) {
     MessageMove     * moveMsg   = nullptr;
     MessageSetAngle * turnMsg   = nullptr;
     MessageAttack   * attackMsg = nullptr;
@@ -198,7 +202,7 @@ void Game::Run() {
             entities.end());
     }
     entitiesToRemove.clear();
-    
+
     // Update entities
     for (auto entity : entities)
         entity->Run();
@@ -214,12 +218,20 @@ void Game::Run() {
 void Game::Render() {
 	graphicsEngine.Draw();
 	graphicsEngine.ClearSprites();
+    if (isInGameMenuOpen) {
+        menuManager->Render();
+    }
 }
 // ================================================================
 
 // LEVEL ==========================================================
 bool Game::IsLevelComplete() {
-    return enemiesLeft > 0 ? false : true;
+    if (enemiesLeft > 0)
+        return false;
+    else {
+        menuManager->SetMenu(MenuManager::MenuID::MAIN);
+        return true;
+    }
 }
 
 void Game::AddBullet(vec2 pos, float angle) {
@@ -251,6 +263,11 @@ void Game::DeleteEntity(Entity* entity) {
     entitiesToRemove.push_back(entity);
 }
 
+void Game::KillPlayer() {
+    menuManager->SetMenu(MenuManager::MenuID::MAIN);
+    isPlayerDead = true;
+}
+
 void Game::KillEnemy(Entity* enemy, const vec2 pos) {
     DeleteEntity(enemy);
     --enemiesLeft;
@@ -268,3 +285,17 @@ void Game::KillEnemy(Entity* enemy, const vec2 pos) {
     entities.push_back(blood);
 }
 // ================================================================
+
+void Game::ToggleInGameMenu() {
+    if (!isInGameMenuOpen) {
+        // Open InGame Menu
+        if (menuManager) {
+            menuManager->SetMenu(MenuManager::MenuID::INGAME);
+            isInGameMenuOpen = true;
+        }
+    }
+    else {
+        // Close InGame Menu
+        isInGameMenuOpen = false;
+    }
+}

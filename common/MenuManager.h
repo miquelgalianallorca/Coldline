@@ -17,7 +17,7 @@ public:
     };
     MenuStrings strings;
 
-    enum class MenuID { MAIN, DIFF, LANG, GAMEOVER, COMPLETE };
+    enum class MenuID { MAIN, DIFF, LANG, GAMEOVER, COMPLETE, INGAME };
     enum class Action { LEFT, UP, RIGHT, DOWN, OK, BACK };
 
     enum class DiffOpt { EASY, NORMAL, HARD };

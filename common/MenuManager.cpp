@@ -3,6 +3,7 @@
 #include "MenuDifficulty.h"
 #include "MenuLanguage.h"
 #include "MenuMain.h"
+#include "MenuInGame.h"
 
 #include "rapidjson\document.h"
 #include "rapidjson\filereadstream.h"
@@ -55,6 +56,11 @@ void MenuManager::SetMenu(MenuID ID) {
         currentMenu = new MenuLanguage(
             vmake(SCR_WIDTH / 2 - 80, SCR_HEIGHT / 2 + 50),
             strings.language);
+    }
+    else if (ID == MenuID::INGAME) {
+        currentMenu = new MenuInGame(
+            vmake(SCR_WIDTH / 2 - 80, SCR_HEIGHT / 2 + 50),
+            std::string("PAUSE"));
     }
 }
 

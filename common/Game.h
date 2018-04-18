@@ -18,19 +18,22 @@ public:
     ~Game();
 
     // STATE =======================================
-    void  ProcessInput(Action action);
-    void  Run();
-    void  Render();
+    void ProcessInput(Action action);
+    void Run();
+    void Render();
     // =============================================
 
     // LEVEL =======================================
-	bool  IsLevelComplete();
-    bool  IsPlayerDead() { return isPlayerDead; }
-	void  AddBullet(vec2 pos, float angle);
-    void  DeleteEntity(Entity* entity);
-    void  KillPlayer() { isPlayerDead = true; }
-    void  KillEnemy(Entity* enemy, const vec2 pos);
+	bool IsLevelComplete();
+    bool IsPlayerDead() { return isPlayerDead; }
+	void AddBullet(vec2 pos, float angle);
+    void DeleteEntity(Entity* entity);
+    void KillPlayer();
+    void KillEnemy(Entity* enemy, const vec2 pos);
     // =============================================
+
+    void ToggleInGameMenu();
+    bool GetIsInGameMenuOpen() const { return isInGameMenuOpen; }
 
 private:
     // LOADING =====================================
@@ -54,4 +57,6 @@ private:
     size_t enemiesLeft;
     bool   isPlayerDead;
     // =============================================
+
+    bool isInGameMenuOpen;
 };
