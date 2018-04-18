@@ -65,3 +65,12 @@ void MenuInputManager::Run() {
     }
     else keysDown.keyEsc = false;
 }
+
+void MenuInputManager::ResetKeys() {
+    keysDown.keyUp    = true;
+    keysDown.keyDown  = true;
+    keysDown.keyLeft  = true;
+    keysDown.keyRight = true;
+    keysDown.keyOK    = true;
+    keysDown.keyEsc   = true;
+}

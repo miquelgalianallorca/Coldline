@@ -10,28 +10,28 @@ MenuMain::MenuMain(vec2 _pos, std::string _title) :
         &MenuMain::NavigatePlay, this);
     Button* play = new Button(
         vmake(SCR_WIDTH / 2 - 80, SCR_HEIGHT / 2 - 50),
-        std::string("PLAY"), navPlay);
+        menuManager->strings.play, navPlay);
     buttons.push_back(play);
     // Difficulty
     std::function<void()> navDiff = std::bind(
         &MenuMain::NavigateDiff, this);
     Button* diff = new Button(
         vmake(SCR_WIDTH / 2 - 80, SCR_HEIGHT / 2 - 70),
-        std::string("DIFFICULTY"), navDiff);
+        menuManager->strings.difficulty, navDiff);
     buttons.push_back(diff);
     // Language
     std::function<void()> navLang = std::bind(
         &MenuMain::NavigateLang, this);
     Button* lang = new Button(
         vmake(SCR_WIDTH / 2 - 80, SCR_HEIGHT / 2 - 90),
-        std::string("LANGUAGE"), navLang);
+        menuManager->strings.language, navLang);
     buttons.push_back(lang);
     // Language
     std::function<void()> navQuit = std::bind(
         &MenuMain::NavigateQuit, this);
     Button* quit = new Button(
         vmake(SCR_WIDTH / 2 - 80, SCR_HEIGHT / 2 - 110),
-        std::string("QUIT"), navQuit);
+        menuManager->strings.quit, navQuit);
     buttons.push_back(quit);
 
     activeButton = buttons.at(0);
@@ -61,6 +61,9 @@ void MenuMain::ProcessInput(const MenuManager::Action &action) {
         activeButton->SetActive(false);
         activeButton = buttons.at(activeButtonIndex);
         activeButton->SetActive(true);
+    }
+    else if (action == MenuManager::Action::BACK) {
+        menuManager->Quit();
     }
 }
 

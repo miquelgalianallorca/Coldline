@@ -10,21 +10,21 @@ MenuDifficulty::MenuDifficulty(vec2 _pos, std::string _title) :
         &MenuDifficulty::SetDiffEasy, this);
     Button* easy = new Button(
         vmake(SCR_WIDTH / 2 - 80, SCR_HEIGHT / 2 - 50),
-        std::string("EASY"), executeEasy);
+        menuManager->strings.easy, executeEasy);
     buttons.push_back(easy);
     // Normal
     std::function<void()> executeNormal = std::bind(
         &MenuDifficulty::SetDiffNormal, this);
     Button* normal = new Button(
         vmake(SCR_WIDTH / 2 - 80, SCR_HEIGHT / 2 - 70),
-        std::string("NORMAL"), executeNormal);
+        menuManager->strings.normal, executeNormal);
     buttons.push_back(normal);
     // Hard
     std::function<void()> executeHard = std::bind(
         &MenuDifficulty::SetDiffHard, this);
     Button* hard = new Button(
         vmake(SCR_WIDTH / 2 - 80, SCR_HEIGHT / 2 - 90),
-        std::string("HARD"), executeHard);
+        menuManager->strings.hard, executeHard);
     buttons.push_back(hard);
 
     activeButton = buttons.at(0);

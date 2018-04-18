@@ -14,6 +14,7 @@ public:
     MenuInputManager();
 
     void Run();
+    void ResetKeys();
 
 private:
     KeysDown keysDown;

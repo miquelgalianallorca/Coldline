@@ -13,8 +13,13 @@ GameStateMenu::GameStateMenu() {
     currentState = StateID::STATE_MENU;
     nextState    = StateID::STATE_MENU;
 
-    menuManager  = new MenuManager();
-    menuManager->SetMenu(MenuManager::MenuID::MAIN);
+    if (!menuManager) {
+        menuManager = new MenuManager();
+        menuManager->Init();
+    }
+    else menuManager->SetChangeState(false);
+    
+    inputManager.ResetKeys();
 }
 
 GameStateMenu::~GameStateMenu() {

@@ -1,9 +1,22 @@
 #pragma once
 
+#include <string>
+
 class Menu;
 
 class MenuManager {
 public:
+    struct MenuStrings{
+        std::string play;
+        std::string difficulty;
+        std::string language;
+        std::string quit;
+        std::string easy;
+        std::string normal;
+        std::string hard;
+    };
+    MenuStrings strings;
+
     enum class MenuID { MAIN, DIFF, LANG, GAMEOVER, COMPLETE };
     enum class Action { LEFT, UP, RIGHT, DOWN, OK, BACK };
 
@@ -13,6 +26,7 @@ public:
     MenuManager();
     ~MenuManager();
 
+    void Init();
     void SetMenu(MenuID ID);
     void Quit();
 
@@ -26,7 +40,7 @@ public:
     DiffOpt GetDifficulty() const { return difficulty; }
     void SetDifficulty(DiffOpt diff) { difficulty = diff; }
     LangOpt GetLanguage() const { return language; }
-    void SetLanguage(LangOpt lang) { language = lang; }
+    void SetLanguage(LangOpt lang);
 
 private:
     Menu* currentMenu;

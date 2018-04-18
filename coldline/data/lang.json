@@ -1,0 +1,29 @@
+{
+	"ENG" : {
+		"play"       : "PLAY",
+		"difficulty" : "DIFFICULTY",
+		"language"   : "LANGUAGE",
+		"quit"       : "QUIT",
+		"easy"       : "EASY",
+		"normal"     : "NORMAL",
+		"hard"       : "HARD"
+	},
+	"ESP" : {
+		"play"       : "JUGAR",
+		"difficulty" : "DIFICULTAD",
+		"language"   : "IDIOMA",
+		"quit"       : "SALIR",
+		"easy"       : "FACIL",
+		"normal"     : "NORMAL",
+		"hard"       : "DIFICIL"
+	},
+	"CAT" : {
+		"play"       : "JUGAR",
+		"difficulty" : "DIFICULTAT",
+		"language"   : "LLENGUA",
+		"quit"       : "EIXIR",
+		"easy"       : "FACIL",
+		"normal"     : "NORMAL",
+		"hard"       : "DIFICIL"
+	}
+}
