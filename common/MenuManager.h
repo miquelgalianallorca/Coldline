@@ -1,5 +1,7 @@
 #pragma once
 
+#include "rapidjson\document.h"
+#include "rapidjson\filereadstream.h"
 #include <string>
 
 class Menu;
@@ -14,6 +16,12 @@ public:
         std::string easy;
         std::string normal;
         std::string hard;
+
+        std::string mainMenu;
+        std::string pause;
+        std::string levelComplete;
+        std::string gameOver;
+        std::string close;
     };
     MenuStrings strings;
 
@@ -48,4 +56,6 @@ private:
 
     DiffOpt difficulty;
     LangOpt language;
+
+    void ParseLanguage(const rapidjson::Document &d, char* lang);
 };

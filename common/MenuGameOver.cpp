@@ -1,23 +1,16 @@
-#include "MenuInGame.h"
+#include "MenuGameOver.h"
 #include "Button.h"
 #include "globals.h"
 #include "Game.h"
 
-MenuInGame::MenuInGame(vec2 _pos, std::string _title) :
+MenuGameOver::MenuGameOver(vec2 _pos, std::string _title) :
     Menu(_pos, _title)
 {
-    // Close InGame Menu
-    std::function<void()> navPlay = std::bind(
-        &MenuInGame::CloseInGameMenu, this);
-    Button* close = new Button(
-        vmake(SCR_WIDTH / 2 - 80, SCR_HEIGHT / 2 - 50),
-        menuManager->strings.close, navPlay);
-    buttons.push_back(close);
     // Go to Main Menu
     std::function<void()> navDiff = std::bind(
-        &MenuInGame::NavigateMainMenu, this);
+        &MenuGameOver::NavigateMainMenu, this);
     Button* mainmenu = new Button(
-        vmake(SCR_WIDTH / 2 - 80, SCR_HEIGHT / 2 - 70),
+        vmake(SCR_WIDTH / 2 - 120, SCR_HEIGHT / 2 - 70),
         menuManager->strings.mainMenu, navDiff);
     buttons.push_back(mainmenu);
 
@@ -25,7 +18,7 @@ MenuInGame::MenuInGame(vec2 _pos, std::string _title) :
     activeButton->SetActive(true);
 }
 
-void MenuInGame::ProcessInput(const MenuManager::Action &action) {
+void MenuGameOver::ProcessInput(const MenuManager::Action &action) {
     if (action == MenuManager::Action::OK) {
         activeButton->Execute();
     }
@@ -49,14 +42,14 @@ void MenuInGame::ProcessInput(const MenuManager::Action &action) {
         activeButton = buttons.at(activeButtonIndex);
         activeButton->SetActive(true);
     }
-    /*else if (action == MenuManager::Action::BACK) {
-        menuManager->Quit();
-    }*/
+    else if (action == MenuManager::Action::BACK) {
+        NavigateMainMenu();
+    }
 }
 
-void MenuInGame::Run() {}
+void MenuGameOver::Run() {}
 
-void MenuInGame::Render() {
+void MenuGameOver::Render() {
     // Render title
     FONT_DrawString(pos, title.data());
     // Render buttons
@@ -65,12 +58,6 @@ void MenuInGame::Render() {
     }
 }
 
-void MenuInGame::CloseInGameMenu() {
-    //menuManager->SetChangeState(true);
-    game->ToggleInGameMenu();
-}
-
-void MenuInGame::NavigateMainMenu() {
-    //menuManager->SetMenu(MenuManager::MenuID::DIFF);
-    game->KillPlayer();
+void MenuGameOver::NavigateMainMenu() {
+    menuManager->SetMenu(MenuManager::MenuID::MAIN);
 }

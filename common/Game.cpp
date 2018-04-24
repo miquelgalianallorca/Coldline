@@ -34,8 +34,6 @@ Game::~Game() {
     for (auto entity : entities) delete entity;
     player = nullptr;
     entities.clear();
-    //enemies.clear();
-    //bullets.clear();
 }
 
 // LOADING ========================================================
@@ -154,7 +152,6 @@ void Game::LoadEnemy(float posX, float posY, float angle) {
 
 // STATE ==========================================================
 void Game::ProcessInput(Action action) {
-    //if (!isInGameMenuOpen) {
     MessageMove     * moveMsg   = nullptr;
     MessageSetAngle * turnMsg   = nullptr;
     MessageAttack   * attackMsg = nullptr;
@@ -229,7 +226,7 @@ bool Game::IsLevelComplete() {
     if (enemiesLeft > 0)
         return false;
     else {
-        menuManager->SetMenu(MenuManager::MenuID::MAIN);
+        menuManager->SetMenu(MenuManager::MenuID::COMPLETE);
         return true;
     }
 }
@@ -264,7 +261,7 @@ void Game::DeleteEntity(Entity* entity) {
 }
 
 void Game::KillPlayer() {
-    menuManager->SetMenu(MenuManager::MenuID::MAIN);
+    menuManager->SetMenu(MenuManager::MenuID::GAMEOVER);
     isPlayerDead = true;
 }
 

@@ -133,6 +133,7 @@
     <ClCompile Include="..\..\common\main.cpp" />
     <ClCompile Include="..\..\common\Menu.cpp" />
     <ClCompile Include="..\..\common\MenuDifficulty.cpp" />
+    <ClCompile Include="..\..\common\MenuGameOver.cpp" />
     <ClCompile Include="..\..\common\MenuInGame.cpp" />
     <ClCompile Include="..\..\common\MenuInputManager.cpp" />
     <ClCompile Include="..\..\common\MenuLanguage.cpp" />
@@ -165,6 +166,7 @@
     <ClInclude Include="..\..\common\GraphicsEngine.h" />
     <ClInclude Include="..\..\common\Menu.h" />
     <ClInclude Include="..\..\common\MenuDifficulty.h" />
+    <ClInclude Include="..\..\common\MenuGameOver.h" />
     <ClInclude Include="..\..\common\MenuInGame.h" />
     <ClInclude Include="..\..\common\MenuInputManager.h" />
     <ClInclude Include="..\..\common\MenuLanguage.h" />

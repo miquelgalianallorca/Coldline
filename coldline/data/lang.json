@@ -1,29 +1,44 @@
 {
 	"ENG" : {
-		"play"       : "PLAY",
-		"difficulty" : "DIFFICULTY",
-		"language"   : "LANGUAGE",
-		"quit"       : "QUIT",
-		"easy"       : "EASY",
-		"normal"     : "NORMAL",
-		"hard"       : "HARD"
+		"play"          : "PLAY",
+		"difficulty"    : "DIFFICULTY",
+		"language"      : "LANGUAGE",
+		"quit"          : "QUIT",
+		"easy"          : "EASY",
+		"normal"        : "NORMAL",
+		"hard"          : "HARD",
+		"mainMenu"      : "MAIN MENU",
+		"pause"         : "PAUSE",
+		"levelComplete" : "LEVEL COMPLETE",
+		"gameOver"      : "GAME OVER",
+		"close"         : "CLOSE"
 	},
 	"ESP" : {
-		"play"       : "JUGAR",
-		"difficulty" : "DIFICULTAD",
-		"language"   : "IDIOMA",
-		"quit"       : "SALIR",
-		"easy"       : "FACIL",
-		"normal"     : "NORMAL",
-		"hard"       : "DIFICIL"
+		"play"          : "JUGAR",
+		"difficulty"    : "DIFICULTAD",
+		"language"      : "IDIOMA",
+		"quit"          : "SALIR",
+		"easy"          : "FACIL",
+		"normal"        : "NORMAL",
+		"hard"          : "DIFICIL",
+		"mainMenu"      : "MENU PPAL",
+		"pause"         : "PAUSA",
+		"levelComplete" : "NIVEL COMPLETO",
+		"gameOver"      : "GAME OVER",
+		"close"         : "CERRAR"
 	},
 	"CAT" : {
-		"play"       : "JUGAR",
-		"difficulty" : "DIFICULTAT",
-		"language"   : "LLENGUA",
-		"quit"       : "EIXIR",
-		"easy"       : "FACIL",
-		"normal"     : "NORMAL",
-		"hard"       : "DIFICIL"
+		"play"          : "JUGAR",
+		"difficulty"    : "DIFICULTAT",
+		"language"      : "IDIOMA",
+		"quit"          : "EIXIR",
+		"easy"          : "FACIL",
+		"normal"        : "NORMAL",
+		"hard"          : "DIFICIL",
+		"mainMenu"      : "MENU PPAL",
+		"pause"         : "PAUSA",
+		"levelComplete" : "NIVELL COMPLET",
+		"gameOver"      : "GAME OVER",
+		"close"         : "TANCAR"
 	}
 }

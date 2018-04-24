@@ -132,6 +132,9 @@
     <ClCompile Include="..\..\common\MenuInGame.cpp">
       <Filter>Source Files\Menu</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\common\MenuGameOver.cpp">
+      <Filter>Source Files\Menu</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\common\stdafx.h">
@@ -222,6 +225,9 @@
       <Filter>Header Files\Menu</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\MenuInGame.h">
+      <Filter>Header Files\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\MenuGameOver.h">
       <Filter>Header Files\Menu</Filter>
     </ClInclude>
   </ItemGroup>
