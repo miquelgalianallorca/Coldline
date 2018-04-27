@@ -8,7 +8,7 @@ struct Message;
 class ComponentEnemy : public Component {
 public:
     ComponentEnemy(Entity *_entity, size_t _timeToShoot,
-        vec2 _pos, float _angle);
+        vec2 _pos, float _angle, float _speed);
     void Run();
     void ReceiveMessage(Message *msg);
 
@@ -17,4 +17,7 @@ private:
     float  angle;
     size_t timeToShoot;
     size_t shootTimer;
+
+    bool isMovingRight;
+    float speed;
 };

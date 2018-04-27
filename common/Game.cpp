@@ -124,9 +124,8 @@ void Game::LoadEnemy(float posX, float posY, float angle) {
     // Transform
     vec2 pos = vmake(posX, posY);
     float radius = 25.f;
-    float speed  = 6.f;
-    enemy->AddComponent(new ComponentTransform(enemy, pos,
-        radius, angle, speed, true));
+    float speed  = 2.f;
+    enemy->AddComponent(new ComponentTransform(enemy, pos, radius, angle, speed, true));
     // Graphics
     GraphicsEngine::Drawable drawable;
     drawable.sprite   = GraphicsEngine::Sprite::ENEMY;
@@ -137,7 +136,7 @@ void Game::LoadEnemy(float posX, float posY, float angle) {
     enemy->AddComponent(new ComponentRenderable(enemy, drawable, graphicsEngine, true));
     // Enemy
     size_t timeToShoot = 50;
-    enemy->AddComponent(new ComponentEnemy(enemy, timeToShoot, pos, angle));
+    enemy->AddComponent(new ComponentEnemy(enemy, timeToShoot, pos, angle, speed));
     // Collider
     enemy->AddComponent(new ComponentCollider(enemy, &physicsEngine,
         PhysicsEngine::Collider(pos, radius, PhysicsEngine::ColliderID::ENEMY, enemy)));

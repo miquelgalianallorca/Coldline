@@ -11,6 +11,8 @@ struct Message {
 // Component to Component =======================
 struct MessageMove : public Message {
 	enum class Dir { UP, DOWN, LEFT, RIGHT };
+    MessageMove() {}
+    MessageMove(Dir _direction) : direction(_direction) {}
     Dir direction;
 };
 
