@@ -47,7 +47,7 @@ void Game::LoadFloor() {
     drawable.repeatX  = SCR_WIDTH  / 128 + 1;
     drawable.repeatY  = SCR_HEIGHT / 128 + 2;
     drawable.priority = 0;
-    floor->AddComponent(new ComponentRenderable(floor, drawable, &graphicsEngine, true));
+    floor->AddComponent(new ComponentRenderable(floor, drawable, graphicsEngine, true));
     entities.push_back(floor);
 }
 
@@ -67,13 +67,13 @@ void Game::LoadPlayer() {
     drawable.angle    = angle;
     drawable.priority = 2;
     player->AddComponent(new ComponentRenderable(player, drawable,
-        &graphicsEngine, true));
+        graphicsEngine, true));
     // Graphics (SlashFX)
     GraphicsEngine::Drawable drawableFX = drawable;
     drawableFX.sprite = GraphicsEngine::Sprite::SLASH;
     drawableFX.priority = 3;
     player->AddComponent(new ComponentRenderableFX(player,
-        drawableFX, &graphicsEngine, false));
+        drawableFX, graphicsEngine, false));
     // Collider
     player->AddComponent(new ComponentCollider(player, &physicsEngine,
         PhysicsEngine::Collider(pos, radius, PhysicsEngine::ColliderID::PLAYER,
@@ -134,16 +134,13 @@ void Game::LoadEnemy(float posX, float posY, float angle) {
     drawable.size     = vmake(radius * 2, radius * 2);
     drawable.angle    = angle;
     drawable.priority = 2;
-    enemy->AddComponent(new ComponentRenderable(enemy, drawable,
-        &graphicsEngine, true));
+    enemy->AddComponent(new ComponentRenderable(enemy, drawable, graphicsEngine, true));
     // Enemy
-    size_t timeToShoot = 24;
-    enemy->AddComponent(new ComponentEnemy(enemy, timeToShoot,
-        pos, angle));
+    size_t timeToShoot = 50;
+    enemy->AddComponent(new ComponentEnemy(enemy, timeToShoot, pos, angle));
     // Collider
     enemy->AddComponent(new ComponentCollider(enemy, &physicsEngine,
-        PhysicsEngine::Collider(pos, radius, PhysicsEngine::ColliderID::ENEMY,
-            enemy)));
+        PhysicsEngine::Collider(pos, radius, PhysicsEngine::ColliderID::ENEMY, enemy)));
     
     ++enemiesLeft;
     entities.push_back(enemy);
@@ -213,8 +210,8 @@ void Game::Run() {
 }
 
 void Game::Render() {
-	graphicsEngine.Draw();
-	graphicsEngine.ClearSprites();
+	graphicsEngine->Draw();
+	graphicsEngine->ClearSprites();
     if (isInGameMenuOpen) {
         menuManager->Render();
     }
@@ -246,7 +243,7 @@ void Game::AddBullet(vec2 pos, float angle) {
     drawable.angle    = angle;
     drawable.priority = 2;
     bullet->AddComponent(new ComponentRenderable(bullet, drawable,
-        &graphicsEngine, true));
+        graphicsEngine, true));
     // Collider
     bullet->AddComponent(new ComponentCollider(bullet, &physicsEngine,
         PhysicsEngine::Collider(pos, radius, PhysicsEngine::ColliderID::BULLET,
@@ -278,7 +275,7 @@ void Game::KillEnemy(Entity* enemy, const vec2 pos) {
 
     Entity* blood = new Entity(this);
     blood->AddComponent(new ComponentRenderableFX(blood,
-        drawableFX, &graphicsEngine, true));
+        drawableFX, graphicsEngine, true));
     entities.push_back(blood);
 }
 // ================================================================

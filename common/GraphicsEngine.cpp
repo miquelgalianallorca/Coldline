@@ -8,6 +8,7 @@ GraphicsEngine::GraphicsEngine() {
     texBlood  = CORE_LoadPNG("../data/blood.png",     false);
     texSlash  = CORE_LoadPNG("../data/slash.png",     false);
     texBullet = CORE_LoadPNG("../data/bullet.png",    false);
+    texMenuBg = CORE_LoadPNG("../data/menuBg.png",    false);
 }
 
 GraphicsEngine::~GraphicsEngine() {
@@ -17,6 +18,7 @@ GraphicsEngine::~GraphicsEngine() {
     CORE_UnloadPNG(texBlood);
     CORE_UnloadPNG(texSlash);
     CORE_UnloadPNG(texBullet);
+    CORE_UnloadPNG(texMenuBg);
 }
 
 void GraphicsEngine::RegisterSprite(Drawable *drawable) {
@@ -30,12 +32,13 @@ void GraphicsEngine::Draw() {
 	for (auto drawable : registeredDrawables) {
 		GLuint texID;
 		switch (drawable->sprite) {
-			case Sprite::BLOOD:  texID = texBlood;  break;
-			case Sprite::ENEMY:  texID = texEnemy;  break;
-			case Sprite::FLOOR:  texID = texFloor;  break;
-			case Sprite::PLAYER: texID = texPlayer; break;
-			case Sprite::SLASH:  texID = texSlash;  break;
-			case Sprite::BULLET: texID = texBullet; break;
+			case Sprite::BLOOD:   texID = texBlood;  break;
+			case Sprite::ENEMY:   texID = texEnemy;  break;
+			case Sprite::FLOOR:   texID = texFloor;  break;
+			case Sprite::PLAYER:  texID = texPlayer; break;
+			case Sprite::SLASH:   texID = texSlash;  break;
+			case Sprite::BULLET:  texID = texBullet; break;
+            case Sprite::MENU_BG: texID = texMenuBg; break;
 		}
 		for (int i = 0; i < drawable->repeatX; i++) {
 			for (int j = 0; j < drawable->repeatY; j++) {

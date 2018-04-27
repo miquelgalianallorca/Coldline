@@ -7,8 +7,7 @@ struct Message;
 
 class ComponentEnemy : public Component {
 public:
-    ComponentEnemy(Entity *_entity,
-        size_t _timeToShoot,
+    ComponentEnemy(Entity *_entity, size_t _timeToShoot,
         vec2 _pos, float _angle);
     void Run();
     void ReceiveMessage(Message *msg);

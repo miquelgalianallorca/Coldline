@@ -5,7 +5,10 @@
 #include "MenuLanguage.h"
 #include "MenuMain.h"
 #include "MenuInGame.h"
+#include "globals.h"
 
+#include "swalib\sys.h"
+#include "swalib\core.h"
 #include <algorithm>
 #include <cstdio>
 #include <iostream>
@@ -24,6 +27,13 @@ MenuManager::MenuManager() :
     strings.easy       = "";
     strings.normal     = "";
     strings.hard       = "";
+
+    menuBackground = new GraphicsEngine::Drawable();
+    menuBackground->sprite = GraphicsEngine::Sprite::MENU_BG;
+    menuBackground->pos = vmake(SCR_WIDTH/2.f, SCR_HEIGHT/2.f);
+    menuBackground->angle = 0.f;
+    menuBackground->priority = 0;
+    menuBackground->size = vmake(SCR_WIDTH, SCR_HEIGHT);
 }
 
 void MenuManager::Init() {    
@@ -79,13 +89,16 @@ void MenuManager::ProcessInput(Action action) {
 }
 
 void MenuManager::Run() {
+    graphicsEngine->RegisterSprite(menuBackground);
     if (currentMenu)
         currentMenu->Run();
 }
 
 void MenuManager::Render() {
+    graphicsEngine->Draw();
     if (currentMenu)
         currentMenu->Render();
+    graphicsEngine->ClearSprites();
 }
 
 void MenuManager::Quit() {

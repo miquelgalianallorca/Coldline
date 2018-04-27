@@ -3,20 +3,25 @@
 #include "swalib\core.h"
 #include "swalib\font.h"
 
-#include "StateManager.h"
 #include "globals.h"
+#include "GraphicsEngine.h"
+#include "StateManager.h"
 
 void SetupRender();
 
 // Definition of externals (globals.h)
-StateManager * stateManager = nullptr;
-Game         * game         = nullptr;
-MenuManager  * menuManager  = nullptr;
+StateManager*   stateManager   = nullptr;
+Game*           game           = nullptr;
+MenuManager*    menuManager    = nullptr;
+GraphicsEngine* graphicsEngine = nullptr;
 
 int Main(void) {
     FONT_Init();
     SetupRender();
+
+    graphicsEngine = new GraphicsEngine();
     stateManager = new StateManager();
+    
     while (!SYS_GottaQuit()) {
         glClear(GL_COLOR_BUFFER_BIT);
         stateManager->Input();

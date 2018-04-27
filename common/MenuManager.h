@@ -4,6 +4,8 @@
 #include "rapidjson\filereadstream.h"
 #include <string>
 
+#include "GraphicsEngine.h"
+
 class Menu;
 
 class MenuManager {
@@ -56,6 +58,8 @@ private:
 
     DiffOpt difficulty;
     LangOpt language;
+    
+    GraphicsEngine::Drawable* menuBackground;
 
     void ParseLanguage(const rapidjson::Document &d, char* lang);
 };

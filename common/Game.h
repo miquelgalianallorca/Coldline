@@ -48,8 +48,8 @@ private:
 	std::vector<Entity*> entitiesToAdd;
 	std::vector<Entity*> entitiesToRemove;
     Entity *player;
-    
-    GraphicsEngine graphicsEngine;
+
+    //GraphicsEngine graphicsEngine;
     PhysicsEngine  physicsEngine;
     // =============================================
 

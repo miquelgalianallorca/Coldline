@@ -5,8 +5,7 @@
 #include "Message.h"
 
 // Player ===============================================
-ComponentPlayer::ComponentPlayer(Entity *_entity, float _range,
-    int _attackTime) :
+ComponentPlayer::ComponentPlayer(Entity *_entity, float _range, int _attackTime) :
     Component(_entity),
     playerRange(_range),
     isAttacking(false),
@@ -19,8 +18,7 @@ void ComponentPlayer::Run() {
         --attackCounter;
         if (attackCounter == 0) {
             isAttacking = false;
-            MessageSetFXVisibility *msgVis =
-                new MessageSetFXVisibility(false);
+            MessageSetFXVisibility *msgVis = new MessageSetFXVisibility(false);
             entity->ReceiveMessage(msgVis);
             delete msgVis;
         }
@@ -31,8 +29,7 @@ void ComponentPlayer::ReceiveMessage(Message *msg) {
     if (auto MSG = dynamic_cast<MessageAttack*>(msg)) {
         attackCounter = attackTime;
         isAttacking   = true;
-        MessageSetFXVisibility *msgVis = 
-            new MessageSetFXVisibility(true);
+        MessageSetFXVisibility *msgVis = new MessageSetFXVisibility(true);
         entity->ReceiveMessage(msgVis);
         delete msgVis;
     }

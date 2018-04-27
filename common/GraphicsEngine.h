@@ -6,7 +6,16 @@
 
 class GraphicsEngine {
 public:
-    enum class Sprite { PLAYER, ENEMY, FLOOR, SLASH, BLOOD, BULLET };
+    enum class Sprite {
+        PLAYER,
+        ENEMY,
+        FLOOR,
+        SLASH,
+        BLOOD,
+        BULLET,
+        MENU_BG
+    };
+
 	struct Drawable {
 		Sprite sprite;
 		vec2   pos;
@@ -31,6 +40,7 @@ private:
     GLuint texBlood;
     GLuint texSlash;
     GLuint texBullet;
+    GLuint texMenuBg;
 	
 	std::vector<Drawable*> registeredDrawables;
     void OrderDrawables();
