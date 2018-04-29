@@ -2,6 +2,7 @@
 #include "Button.h"
 #include "globals.h"
 #include "Game.h"
+#include "GraphicsEngine.h"
 
 MenuGameOver::MenuGameOver(vec2 _pos, std::string _title) :
     Menu(_pos, _title)
@@ -51,7 +52,7 @@ void MenuGameOver::Run() {}
 
 void MenuGameOver::Render() {
     // Render title
-    FONT_DrawString(pos, title.data());
+    graphicsEngine->DrawTextLine(pos, title.data());
     // Render buttons
     for (auto button : buttons) {
         button->Render();

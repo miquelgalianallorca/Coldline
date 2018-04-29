@@ -2,6 +2,7 @@
 #include "Button.h"
 #include "globals.h"
 #include "Game.h"
+#include "GraphicsEngine.h"
 
 MenuInGame::MenuInGame(vec2 _pos, std::string _title) :
     Menu(_pos, _title)
@@ -49,16 +50,13 @@ void MenuInGame::ProcessInput(const MenuManager::Action &action) {
         activeButton = buttons.at(activeButtonIndex);
         activeButton->SetActive(true);
     }
-    /*else if (action == MenuManager::Action::BACK) {
-        menuManager->Quit();
-    }*/
 }
 
 void MenuInGame::Run() {}
 
 void MenuInGame::Render() {
     // Render title
-    FONT_DrawString(pos, title.data());
+    graphicsEngine->DrawTextLine(pos, title.data());
     // Render buttons
     for (auto button : buttons) {
         button->Render();
@@ -66,11 +64,9 @@ void MenuInGame::Render() {
 }
 
 void MenuInGame::CloseInGameMenu() {
-    //menuManager->SetChangeState(true);
     game->ToggleInGameMenu();
 }
 
 void MenuInGame::NavigateMainMenu() {
-    //menuManager->SetMenu(MenuManager::MenuID::DIFF);
     game->KillPlayer();
 }

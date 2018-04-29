@@ -32,6 +32,7 @@ public:
 	void RegisterSprite(Drawable *drawable);
 	void ClearSprites();
     void Draw();
+    void DrawTextLine(vec2 _pos, const char* _text);
 
 private:
     GLuint texPlayer;

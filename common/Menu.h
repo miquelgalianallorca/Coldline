@@ -4,7 +4,6 @@
 #include "stdafx.h"
 #include "swalib/sys.h"
 #include "swalib/core.h"
-#include "swalib/font.h"
 
 class Button;
 

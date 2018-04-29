@@ -1,4 +1,6 @@
 #include "Button.h"
+#include "globals.h"
+#include "GraphicsEngine.h"
 
 // BUTTON =======================================================
 Button::Button(vec2 _pos, std::string _text,
@@ -18,7 +20,7 @@ void Button::SetActive(bool value) {
 }
 
 void Button::Render() {
-    FONT_DrawString(pos, currentText.data());
+    graphicsEngine->DrawTextLine(pos, currentText.data());
 }
 
 void Button::Execute() {

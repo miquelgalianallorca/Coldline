@@ -56,6 +56,7 @@ private:
     // Level =======================================
     size_t enemiesLeft;
     bool   isPlayerDead;
+    size_t levelCompleteTimer;
     // =============================================
 
     bool isInGameMenuOpen;

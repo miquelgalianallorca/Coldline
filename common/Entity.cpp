@@ -3,6 +3,9 @@
 #include "Message.h"
 #include "Component.h"
 
+#include "swalib\sys.h"
+#include "swalib\core.h"
+
 Entity::~Entity() {
     for (auto component : components)
         delete component;

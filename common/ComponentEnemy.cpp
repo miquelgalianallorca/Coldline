@@ -4,18 +4,22 @@
 #include "Message.h"
 
 // Player ===============================================
-ComponentEnemy::ComponentEnemy(Entity *_entity,
-    size_t _timeToShoot, vec2 _pos, float _angle, float _speed) :
+ComponentEnemy::ComponentEnemy(Entity *_entity, size_t _timeToShoot) :
     Component(_entity),
     timeToShoot(_timeToShoot),
-    pos(_pos),
-    angle(_angle),
     shootTimer(0),
-    speed(_speed),
     isMovingRight(false)
 {}
 
 void ComponentEnemy::Run() {    
+    // Transform ========================================
+    MessageGetTransform* msg = new MessageGetTransform();
+    entity->ReceiveMessage(msg);
+    vec2 pos = msg->pos;
+    float angle = msg->angle;
+    delete msg;
+    // ==================================================
+
     // Move =============================================
     if (pos.x < 0 || pos.x > 640)
         isMovingRight = !isMovingRight;
@@ -49,25 +53,5 @@ void ComponentEnemy::Run() {
     // ==================================================
 }
 
-void ComponentEnemy::ReceiveMessage(Message *msg) {
-    if (auto MSG = dynamic_cast<MessageMove*>(msg)) {
-        switch (MSG->direction) {
-        case MessageMove::Dir::UP:
-            pos = vadd(pos, vmake(0, speed));
-            break;
-        case MessageMove::Dir::DOWN:
-            pos = vadd(pos, vmake(0, -speed));
-            break;
-        case MessageMove::Dir::LEFT:
-            pos = vadd(pos, vmake(-speed, 0));
-            break;
-        case MessageMove::Dir::RIGHT:
-            pos = vadd(pos, vmake(speed, 0));
-            break;
-        }
-    }
-    if (auto MSG = dynamic_cast<MessageSetAngle*>(msg)) {
-        angle = MSG->angle;
-    }
-}
+void ComponentEnemy::ReceiveMessage(Message *msg) {}
 // ======================================================

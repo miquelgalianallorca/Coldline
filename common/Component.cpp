@@ -40,9 +40,13 @@ void ComponentTransform::ReceiveMessage(Message *msg) {
         if (!canExitScreen) pos = ClampPos(pos);
         UpdateGraphics();
     }
-	if (auto MSG = dynamic_cast<MessageSetAngle*>(msg)) {
+	else if (auto MSG = dynamic_cast<MessageSetAngle*>(msg)) {
 		angle = MSG->angle;
         UpdateGraphics();
+    }
+    else if (auto MSG = dynamic_cast<MessageGetTransform*>(msg)) {
+        MSG->pos   = pos;
+        MSG->angle = angle;
     }
 }
 

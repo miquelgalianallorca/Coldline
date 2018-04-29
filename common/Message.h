@@ -20,6 +20,11 @@ struct MessageSetAngle : public Message {
 	float angle;
 };
 
+struct MessageGetTransform : public Message {
+    vec2  pos;
+    float angle;
+};
+
 struct MessageAttack : public Message {};
 
 struct MessageUpdateDrawable : public Message {

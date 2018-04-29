@@ -1,6 +1,7 @@
 #include "MenuDifficulty.h"
 #include "Button.h"
 #include "globals.h"
+#include "GraphicsEngine.h"
 
 MenuDifficulty::MenuDifficulty(vec2 _pos, std::string _title) :
     Menu(_pos, _title)
@@ -64,7 +65,7 @@ void MenuDifficulty::Run() {}
 
 void MenuDifficulty::Render() {
     // Render title
-    FONT_DrawString(pos, title.data());
+    graphicsEngine->DrawTextLine(pos, title.data());
     // Render buttons
     for (auto button : buttons) {
         button->Render();

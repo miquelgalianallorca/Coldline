@@ -1,4 +1,5 @@
 #include "GraphicsEngine.h"
+#include "swalib/font.h"
 #include <algorithm>
 
 GraphicsEngine::GraphicsEngine() {
@@ -56,4 +57,8 @@ void GraphicsEngine::OrderDrawables() {
             return a->priority < b->priority;
         }
     );
+}
+
+void GraphicsEngine::DrawTextLine(vec2 _pos, const char* _text) {
+    FONT_DrawString(_pos, _text);
 }

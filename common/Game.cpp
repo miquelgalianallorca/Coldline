@@ -22,7 +22,8 @@
 Game::Game(Difficulty diff) :
     enemiesLeft(0),
     isPlayerDead(false),
-    isInGameMenuOpen(false)
+    isInGameMenuOpen(false),
+    levelCompleteTimer(30)
 {
     // Entities
     LoadPlayer();
@@ -136,7 +137,7 @@ void Game::LoadEnemy(float posX, float posY, float angle) {
     enemy->AddComponent(new ComponentRenderable(enemy, drawable, graphicsEngine, true));
     // Enemy
     size_t timeToShoot = 50;
-    enemy->AddComponent(new ComponentEnemy(enemy, timeToShoot, pos, angle, speed));
+    enemy->AddComponent(new ComponentEnemy(enemy, timeToShoot));
     // Collider
     enemy->AddComponent(new ComponentCollider(enemy, &physicsEngine,
         PhysicsEngine::Collider(pos, radius, PhysicsEngine::ColliderID::ENEMY, enemy)));
@@ -221,10 +222,13 @@ void Game::Render() {
 bool Game::IsLevelComplete() {
     if (enemiesLeft > 0)
         return false;
-    else {
+    
+    --levelCompleteTimer;
+    if (levelCompleteTimer == 0) {
         menuManager->SetMenu(MenuManager::MenuID::COMPLETE);
         return true;
     }
+    return false;
 }
 
 void Game::AddBullet(vec2 pos, float angle) {

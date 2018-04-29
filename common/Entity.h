@@ -1,8 +1,6 @@
 #pragma once
 
 #include "stdafx.h"
-#include "swalib\sys.h"
-#include "swalib\core.h"
 
 class  Component;
 class  Game;

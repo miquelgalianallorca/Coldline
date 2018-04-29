@@ -1,6 +1,7 @@
 #include "MenuMain.h"
 #include "Button.h"
 #include "globals.h"
+#include "GraphicsEngine.h"
 
 MenuMain::MenuMain(vec2 _pos, std::string _title) :
     Menu(_pos, _title)
@@ -71,7 +72,7 @@ void MenuMain::Run() {}
 
 void MenuMain::Render() {
     // Render title
-    FONT_DrawString(pos, title.data());
+    graphicsEngine->DrawTextLine(pos, title.data());
     // Render buttons
     for (auto button : buttons) {
         button->Render();
